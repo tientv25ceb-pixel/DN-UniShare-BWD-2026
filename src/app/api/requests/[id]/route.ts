@@ -45,7 +45,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   }
 
   if (status === "collected") {
-    if (req.requester_id !== user.id) return unauthorized()
+    const itemPosterId = (req as any).items?.poster_id
+    if (req.requester_id !== user.id && itemPosterId !== user.id) return unauthorized()
     if (req.status !== "accepted") {
       return badRequest("Request must be accepted before it can be collected")
     }

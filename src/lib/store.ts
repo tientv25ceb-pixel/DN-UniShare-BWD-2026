@@ -11,6 +11,8 @@ interface ShareStore {
   itemsLoading: boolean
   fetchItems: (params?: Record<string, string>) => Promise<void>
   addItem: (data: Record<string, any>) => Promise<any>
+  updateItem: (id: string, data: Record<string, any>) => Promise<any>
+  deleteItem: (id: string) => Promise<void>
 
   searchQuery: string
   setSearchQuery: (query: string) => void
@@ -40,6 +42,48 @@ interface ShareStore {
   logout: () => Promise<void>
 }
 
+function parseDbItem(item: any) {
+  if (!item) return item;
+  let parsedDesc = item.description;
+  let price: number | undefined = undefined;
+  let virtualExchangeType = item.exchangeType;
+  let latitude: number | undefined = undefined;
+  let longitude: number | undefined = undefined;
+  let lostDate: string | undefined = undefined;
+  let reward: string | undefined = undefined;
+  let contactPhone: string | undefined = undefined;
+
+  try {
+    const raw = item.description || '';
+    if (raw.trim().startsWith('{') && raw.trim().endsWith('}')) {
+      const data = JSON.parse(raw);
+      parsedDesc = data.description || '';
+      price = data.price;
+      virtualExchangeType = data.exchangeType || item.exchangeType;
+      latitude = data.latitude;
+      longitude = data.longitude;
+      lostDate = data.lostDate;
+      reward = data.reward;
+      contactPhone = data.contactPhone;
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  return {
+    ...item,
+    rawDescription: item.description,
+    description: parsedDesc,
+    price,
+    exchangeType: virtualExchangeType,
+    latitude,
+    longitude,
+    lostDate,
+    reward,
+    contactPhone,
+  };
+}
+
 export const useStore = create<ShareStore>()((set, get) => ({
   items: [],
   itemsLoading: false,
@@ -47,18 +91,33 @@ export const useStore = create<ShareStore>()((set, get) => ({
     set({ itemsLoading: true })
     try {
       const items = await api.getItems(params)
-      set({ items })
+      set({ items: items.map(parseDbItem) })
     } catch (e) {
       console.error('fetchItems error:', e)
-      set({ items: get().items.length > 0 ? get().items : mockItems })
+      set({ items: get().items.length > 0 ? get().items : mockItems.map(parseDbItem) })
     } finally {
       set({ itemsLoading: false })
     }
   },
   addItem: async (data) => {
     const item = await api.createItem(data)
-    set((state) => ({ items: [item, ...state.items] }))
-    return item
+    const parsed = parseDbItem(item)
+    set((state) => ({ items: [parsed, ...state.items] }))
+    return parsed
+  },
+  updateItem: async (id, data) => {
+    const updated = await api.updateItem(id, data)
+    const parsed = parseDbItem(updated)
+    set((state) => ({
+      items: state.items.map((item: any) => item.id === id ? parsed : item)
+    }))
+    return parsed
+  },
+  deleteItem: async (id) => {
+    await api.deleteItem(id)
+    set((state) => ({
+      items: state.items.filter((item: any) => item.id !== id)
+    }))
   },
 
   searchQuery: '',

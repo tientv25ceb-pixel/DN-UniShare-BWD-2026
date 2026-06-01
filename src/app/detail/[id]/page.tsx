@@ -13,15 +13,17 @@ import { CATEGORY_MAP, CONDITION_LABELS } from '@/lib/data';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { MapPin, Clock, ArrowLeft, Share2, MessageCircle, AlertCircle, ShieldCheck, Heart, Check, X, QrCode } from 'lucide-react';
+import { MapPin, Clock, ArrowLeft, Share2, MessageCircle, AlertCircle, ShieldCheck, Heart, Check, X, QrCode, Phone, Pencil, Trash2 } from 'lucide-react';
+import PaymentModal from '@/components/payment-modal';
 
 export default function ItemDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const { id } = use(params);
-  const { items, currentUser, sendRequest, requests, favorites, toggleFavorite, startConversation } = useStore();
+  const { items, currentUser, sendRequest, requests, favorites, toggleFavorite, startConversation, deleteItem } = useStore();
   const [toast, setToast] = useState('');
   const [showQR, setShowQR] = useState(false);
   const [showGift, setShowGift] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const item = items.find(i => i.id === id);
 
   const showToast = (msg: string) => {
@@ -68,6 +70,14 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
     } catch { showToast('Lỗi khi tạo hội thoại'); }
   };
 
+  const handleDeleteItem = async () => {
+    if (!window.confirm(`Bạn có chắc muốn xóa "${item.title}"?`)) return;
+    try {
+      await deleteItem(item.id);
+      router.push('/profile');
+    } catch { showToast('Xóa thất bại'); }
+  };
+
   const handleShare = async () => {
     const url = window.location.href;
     if (navigator.share) {
@@ -103,10 +113,18 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
 
           <div className="card rounded-2xl overflow-hidden flex flex-col lg:flex-row">
             <div className="w-full lg:w-1/2 relative min-h-[350px] lg:min-h-[550px] bg-[var(--secondary)]">
-              <Image src={item.image} alt={item.title} fill className="object-cover" priority />
+              <Image src={item.image || 'https://images.unsplash.com/photo-1595787143151-e601da948ea8?auto=format&fit=crop&w=600&h=400&q=80'} alt={item.title} fill className="object-cover" priority />
               <div className="absolute top-4 left-4 flex gap-2">
-                <span className={`badge text-white shadow-lg ${item.exchangeType === 'mienphi' ? 'bg-green-500' : 'bg-blue-500'}`}>
-                  {item.exchangeType === 'mienphi' ? '🍀 Tặng Miễn Phí' : '🔄 Cần Trao Đổi'}
+                <span className={`badge text-white shadow-lg ${
+                  item.exchangeType === 'mienphi' ? 'bg-green-500' :
+                  item.exchangeType === 'sale' ? 'bg-amber-500' :
+                  item.exchangeType === 'lost' ? 'bg-red-500' :
+                  item.exchangeType === 'found' ? 'bg-cyan-500' : 'bg-blue-500'
+                }`}>
+                  {item.exchangeType === 'mienphi' ? '🍀 Tặng Miễn Phí' :
+                   item.exchangeType === 'sale' ? '💰 Mua Bán (Có phí)' :
+                   item.exchangeType === 'lost' ? '🔍 Tìm Đồ Thất Lạc' :
+                   item.exchangeType === 'found' ? '📢 Nhặt Được Đồ' : '🔄 Cần Trao Đổi'}
                 </span>
                 {item.isFeatured && <span className="badge bg-amber-400 text-amber-900 shadow-lg">⭐ Nổi bật</span>}
               </div>
@@ -124,11 +142,44 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
                 <span className="badge badge-green">✨ {CONDITION_LABELS[item.condition]}</span>
               </div>
 
-              <h1 className="text-2xl md:text-3xl font-bold mb-4">{item.title}</h1>
+              <h1 className="text-2xl md:text-3xl font-bold mb-3">{item.title}</h1>
+
+              {item.exchangeType === 'sale' && (
+                <div className="text-3xl font-black text-emerald-400 mb-5 flex items-baseline gap-1">
+                  {(item.price || 0).toLocaleString('vi-VN')}
+                  <span className="text-sm font-bold text-gray-400">đ</span>
+                </div>
+              )}
+
+              {(item.exchangeType === 'lost' || item.exchangeType === 'found') && (
+                <div className="p-5 rounded-2xl bg-red-500/10 border border-red-500/20 mb-6 text-sm space-y-3">
+                  <p className="font-bold text-red-400 uppercase tracking-widest text-[10px] flex items-center gap-1.5">
+                    🚨 {item.exchangeType === 'lost' ? 'Thông tin báo mất đồ' : 'Thông tin nhặt được đồ'}
+                  </p>
+                  {item.lostDate && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Thời gian:</span>
+                      <span className="font-semibold text-gray-200">{item.lostDate}</span>
+                    </div>
+                  )}
+                  {item.reward && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Hậu tạ / Cám ơn:</span>
+                      <span className="font-semibold text-emerald-400">{item.reward}</span>
+                    </div>
+                  )}
+                  {item.contactPhone && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Số điện thoại liên hệ:</span>
+                      <span className="font-semibold text-blue-400">{item.contactPhone}</span>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div className="flex flex-wrap items-center gap-5 text-xs text-[var(--muted-foreground)] font-medium mb-6 pb-6 border-b border-[var(--border)]">
                 <span className="flex items-center gap-1.5"><Clock size={14} /> Đăng ngày: {item.createdAt}</span>
-                <span className="flex items-center gap-1.5"><AlertCircle size={14} /> {item.requestedCount} người đã yêu cầu</span>
+                <span className="flex items-center gap-1.5"><AlertCircle size={14} /> {item.requestedCount} người đã quan tâm</span>
               </div>
 
               <div className="mb-6 flex-grow">
@@ -155,24 +206,50 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
               </div>
 
               <div className="flex gap-3 mt-auto">
-                {!currentUser ? (
+                {item.status === 'completed' ? (
+                  <button disabled className="flex-1 py-3 rounded-xl bg-gray-700 text-gray-500 border border-white/5 font-bold text-sm flex items-center justify-center gap-2 cursor-not-allowed">
+                    {item.exchangeType === 'sale' ? '🛒 Đã bán thành công' : '🎉 Đã hoàn thành/Nhận lại'}
+                  </button>
+                ) : !currentUser ? (
                   <Link href="/" className="flex-1 btn-primary justify-center py-3 text-sm">
-                    <MessageCircle size={18} /> Đăng nhập để yêu cầu
+                    <MessageCircle size={18} /> Đăng nhập để giao dịch
                   </Link>
                 ) : isOwner ? (
-                  <Link href="/requests" className="flex-1 btn-outline justify-center py-3 text-sm">
-                    <ShieldCheck size={18} /> Quản lý yêu cầu
-                  </Link>
+                  <div className="flex gap-2 flex-1">
+                    <Link href="/requests" className="flex-1 btn-outline justify-center py-3 text-sm">
+                      <ShieldCheck size={18} /> Quản lý
+                    </Link>
+                    <button onClick={() => router.push(`/edit/${item.id}`)} className="px-4 py-3 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-colors" aria-label="Sửa">
+                      <Pencil size={18} />
+                    </button>
+                    <button onClick={handleDeleteItem} className="px-4 py-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors" aria-label="Xóa">
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                ) : item.exchangeType === 'sale' ? (
+                  <button onClick={() => setShowPayment(true)} className="flex-1 btn-primary bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 justify-center py-3 text-sm font-bold shadow-lg shadow-blue-500/25">
+                    💰 Mua ngay & Thanh toán
+                  </button>
+                ) : (item.exchangeType === 'lost' || item.exchangeType === 'found') ? (
+                  item.contactPhone ? (
+                    <a href={`tel:${item.contactPhone}`} className="flex-1 btn-primary bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 justify-center py-3 text-sm font-bold flex items-center justify-center gap-2">
+                      <Phone size={18} /> Gọi điện liên hệ
+                    </a>
+                  ) : (
+                    <button onClick={handleChat} className="flex-1 btn-primary justify-center py-3 text-sm">
+                      <MessageCircle size={18} /> Nhắn tin liên hệ
+                    </button>
+                  )
                 ) : hasRequested && requestStatus === 'pending' ? (
-                  <button disabled className="flex-1 py-3 rounded-xl bg-green-100 text-green-700 font-bold text-sm flex items-center justify-center gap-2">
+                  <button disabled className="flex-1 py-3 rounded-xl bg-green-100/10 text-green-400 border border-green-500/20 font-bold text-sm flex items-center justify-center gap-2">
                     <Clock size={20} /> Đã gửi yêu cầu
                   </button>
                 ) : hasRequested && requestStatus === 'accepted' ? (
-                  <button disabled className="flex-1 py-3 rounded-xl bg-blue-100 text-blue-700 font-bold text-sm flex items-center justify-center gap-2">
+                  <button disabled className="flex-1 py-3 rounded-xl bg-blue-100/10 text-blue-400 border border-blue-500/20 font-bold text-sm flex items-center justify-center gap-2">
                     <Check size={20} /> Đã được duyệt
                   </button>
                 ) : hasRequested && requestStatus === 'rejected' ? (
-                  <button disabled className="flex-1 py-3 rounded-xl bg-red-100 text-red-700 font-bold text-sm flex items-center justify-center gap-2">
+                  <button disabled className="flex-1 py-3 rounded-xl bg-red-100/10 text-red-400 border border-red-500/20 font-bold text-sm flex items-center justify-center gap-2">
                     <X size={20} /> Đã từ chối
                   </button>
                 ) : (
@@ -201,6 +278,17 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
 
       <QRModal isOpen={showQR} onClose={() => setShowQR(false)} url={typeof window !== 'undefined' ? window.location.href : ''} title={item.title} />
       <GiftAnimation show={showGift} onClose={() => setShowGift(false)} />
+      {showPayment && (
+        <PaymentModal
+          isOpen={showPayment}
+          onClose={() => setShowPayment(false)}
+          item={item}
+          onSuccess={() => {
+            showToast('Giao dịch thanh toán thành công!');
+            setShowPayment(false);
+          }}
+        />
+      )}
     </main>
   );
 }

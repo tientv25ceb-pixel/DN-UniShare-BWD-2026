@@ -1,198 +1,107 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Gift, RefreshCw, Coins, Search, Heart, ArrowRight } from 'lucide-react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import MountainRange from '@/components/decorative/mountain-range';
-import { useStore } from '@/lib/store';
-import { CATEGORY_LABELS, Category, CONDITION_LABELS, Condition, LOCATIONS, ExchangeType } from '@/lib/data';
-import { uploadImage } from '@/lib/api';
-import { Camera, CheckCircle2, Gift, MapPin, Upload, Loader } from 'lucide-react';
 
-export default function PostPage() {
-  const router = useRouter();
-  const addItem = useStore(state => state.addItem);
-  const currentUser = useStore(state => state.currentUser);
-  const [submitted, setSubmitted] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [form, setForm] = useState({
-    title: '',
-    description: '',
-    category: '' as Category | '',
-    condition: '' as Condition | '',
-    exchangeType: 'mienphi' as ExchangeType,
-    location: '',
-    image: '',
-    imageFile: null as File | null,
-  });
+const OPTIONS = [
+  {
+    slug: 'give',
+    label: 'Tặng đồ',
+    desc: 'Cho đi những món đồ còn tốt đến người cần',
+    icon: Gift,
+    color: 'text-green-400',
+    border: 'border-green-500/20',
+    bg: 'bg-green-500/5',
+    hover: 'hover:border-green-500/40 hover:bg-green-500/10',
+    gradient: 'from-green-500/20 to-emerald-500/10',
+  },
+  {
+    slug: 'exchange',
+    label: 'Trao đổi',
+    desc: 'Đổi đồ với sinh viên khác trong làng ĐH',
+    icon: RefreshCw,
+    color: 'text-blue-400',
+    border: 'border-blue-500/20',
+    bg: 'bg-blue-500/5',
+    hover: 'hover:border-blue-500/40 hover:bg-blue-500/10',
+    gradient: 'from-blue-500/20 to-cyan-500/10',
+  },
+  {
+    slug: 'sell',
+    label: 'Bán đồ',
+    desc: 'Thanh lý đồ cũ với giá sinh viên',
+    icon: Coins,
+    color: 'text-amber-400',
+    border: 'border-amber-500/20',
+    bg: 'bg-amber-500/5',
+    hover: 'hover:border-amber-500/40 hover:bg-amber-500/10',
+    gradient: 'from-amber-500/20 to-orange-500/10',
+  },
+  {
+    slug: 'lost',
+    label: 'Tìm đồ',
+    desc: 'Báo tin thất lạc trong làng Đại học',
+    icon: Search,
+    color: 'text-red-400',
+    border: 'border-red-500/20',
+    bg: 'bg-red-500/5',
+    hover: 'hover:border-red-500/40 hover:bg-red-500/10',
+    gradient: 'from-red-500/20 to-rose-500/10',
+  },
+  {
+    slug: 'found',
+    label: 'Nhặt được đồ',
+    desc: 'Đăng tin tìm chủ cho vật phẩm nhặt được',
+    icon: Heart,
+    color: 'text-cyan-400',
+    border: 'border-cyan-500/20',
+    bg: 'bg-cyan-500/5',
+    hover: 'hover:border-cyan-500/40 hover:bg-cyan-500/10',
+    gradient: 'from-cyan-500/20 to-teal-500/10',
+  },
+];
 
-  if (!currentUser) {
-    return (
-      <main className="min-h-screen flex flex-col">
-        <Header />
-        <div className="flex-grow flex items-center justify-center p-4">
-          <div className="auth-gate">
-            <div className="text-5xl mb-4">🔒</div>
-            <h2 className="text-xl font-bold mb-2">Vui lòng đăng nhập</h2>
-            <p className="text-sm text-[var(--muted-foreground)] mb-6">Bạn cần đăng nhập để đăng món đồ.</p>
-            <Link href="/" className="btn-primary">Về trang chủ</Link>
-          </div>
-        </div>
-        <Footer />
-      </main>
-    );
-  }
-
-  const isFormValid = form.title && form.description && form.category && form.condition && form.location && form.image;
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Ảnh không được quá 5MB')
-      return
-    }
-
-    setUploading(true)
-    try {
-      const { url } = await uploadImage(file)
-      setForm(prev => ({ ...prev, image: url, imageFile: file }))
-    } catch (err: any) {
-      alert(`Upload ảnh thất bại: ${err.message || 'vui lòng thử lại'}`)
-    } finally {
-      setUploading(false)
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isFormValid || !currentUser) return;
-    try {
-      await addItem({
-        title: form.title,
-        description: form.description,
-        category: form.category as Category,
-        condition: form.condition as Condition,
-        exchangeType: form.exchangeType,
-        location: form.location,
-        image: form.image,
-      });
-      setSubmitted(true);
-    } catch (err) {
-      alert('Đăng bài thất bại, vui lòng thử lại')
-    }
-  };
-
-  if (submitted) {
-    return (
-      <main className="min-h-screen flex flex-col relative overflow-hidden">
-        <Header />
-        <MountainRange className="absolute bottom-0 left-0 w-full h-[80px] opacity-40" />
-        <div className="flex-grow flex items-center justify-center p-4">
-          <div className="card p-10 rounded-2xl max-w-md w-full text-center animate-in">
-            <div className="h-20 w-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600"><CheckCircle2 size={40} /></div>
-            <h2 className="text-2xl font-bold mb-3">Đăng bài thành công!</h2>
-            <p className="text-sm text-[var(--muted-foreground)] mb-8">Cảm ơn bạn đã chia sẻ. Món đồ của bạn đang hiển thị trên trang Khám phá.</p>
-            <div className="flex flex-col gap-3">
-              <button onClick={() => router.push('/items')} className="btn-primary justify-center w-full py-3">Xem danh sách món đồ</button>
-              <button onClick={() => { setSubmitted(false); setForm({ ...form, title: '', description: '' }); }} className="btn-outline justify-center w-full py-3">Đăng thêm món đồ khác</button>
-            </div>
-          </div>
-        </div>
-        <Footer />
-      </main>
-    );
-  }
-
+export default function PostLanding() {
   return (
     <main className="min-h-screen flex flex-col relative overflow-hidden">
       <Header />
       <MountainRange className="absolute bottom-0 left-0 w-full h-[80px] opacity-40" />
       <div className="flex-grow pt-28 pb-16 relative z-10">
-        <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold mb-2">Tặng & Trao đổi đồ</h1>
-            <p className="text-sm text-[var(--muted-foreground)]">Chia sẻ vật dụng bạn không còn cần tới cho cộng đồng sinh viên Đà Nẵng.</p>
+        <div className="container mx-auto px-4 md:px-6 max-w-4xl">
+          <div className="text-center mb-12">
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent mb-3">
+              Bạn muốn đăng gì?
+            </h1>
+            <p className="text-sm text-[var(--muted-foreground)] max-w-lg mx-auto">
+              Chọn hình thức đăng tin phù hợp với nhu cầu của bạn
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="card p-6 md:p-8 rounded-2xl">
-            {/* Hình thức */}
-            <div className="mb-6">
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-3">Hình thức chia sẻ *</label>
-              <div className="grid grid-cols-2 gap-3">
-                <button type="button" onClick={() => setForm({ ...form, exchangeType: 'mienphi' })}
-                  className={`p-4 rounded-xl flex flex-col items-center gap-2 border-2 transition-all text-sm font-bold ${form.exchangeType === 'mienphi' ? 'border-green-500 bg-green-50 text-green-700' : 'border-transparent bg-[var(--secondary)]'}`}>
-                  <Gift size={24} /> Tặng Miễn Phí
-                </button>
-                <button type="button" onClick={() => setForm({ ...form, exchangeType: 'traodoi' })}
-                  className={`p-4 rounded-xl flex flex-col items-center gap-2 border-2 transition-all text-sm font-bold ${form.exchangeType === 'traodoi' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-transparent bg-[var(--secondary)]'}`}>
-                  <Upload size={24} /> Trao Đổi Đồ
-                </button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Tên món đồ *</label>
-                  <input type="text" required placeholder="VD: Giáo trình Giải tích 1" className="w-full px-3.5 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] text-sm focus:ring-2 focus:ring-[color-mix(in_oklch,_var(--primary)_30%,_transparent)] outline-none transition-all" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
+            {OPTIONS.map(opt => (
+              <Link
+                key={opt.slug}
+                href={`/post/${opt.slug}`}
+                className={`w-full max-w-sm group relative overflow-hidden rounded-2xl border ${opt.border} ${opt.bg} ${opt.hover} p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl`}
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${opt.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`} />
+                <div className="relative z-10">
+                  <div className={`h-12 w-12 rounded-xl ${opt.bg} border ${opt.border} flex items-center justify-center mb-4 ${opt.color} group-hover:scale-110 transition-transform duration-300`}>
+                    <opt.icon size={24} />
+                  </div>
+                  <h3 className="text-lg font-bold text-[var(--foreground)] mb-1.5">{opt.label}</h3>
+                  <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">{opt.desc}</p>
+                  <div className={`flex items-center gap-1 mt-4 text-xs font-semibold ${opt.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
+                    <span>Bắt đầu</span>
+                    <ArrowRight size={12} />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Danh mục *</label>
-                  <select required className="w-full px-3.5 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] text-sm focus:ring-2 focus:ring-[color-mix(in_oklch,_var(--primary)_30%,_transparent)] outline-none transition-all" value={form.category} onChange={e => setForm({ ...form, category: e.target.value as Category })}>
-                    <option value="" disabled>Chọn danh mục</option>
-                    {Object.entries(CATEGORY_LABELS).map(([key, label]) => (<option key={key} value={key}>{label}</option>))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Tình trạng *</label>
-                  <select required className="w-full px-3.5 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] text-sm focus:ring-2 focus:ring-[color-mix(in_oklch,_var(--primary)_30%,_transparent)] outline-none transition-all" value={form.condition} onChange={e => setForm({ ...form, condition: e.target.value as Condition })}>
-                    <option value="" disabled>Chọn tình trạng</option>
-                    {Object.entries(CONDITION_LABELS).map(([key, label]) => (<option key={key} value={key}>{label}</option>))}
-                  </select>
-                </div>
-              </div>
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Mô tả chi tiết *</label>
-                  <textarea required rows={4} placeholder="Mô tả tình trạng, lý do tặng, hoặc đồ muốn trao đổi..." className="w-full px-3.5 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] text-sm focus:ring-2 focus:ring-[color-mix(in_oklch,_var(--primary)_30%,_transparent)] outline-none transition-all resize-none" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Hình ảnh *</label>
-                  <label className="w-full h-[100px] rounded-xl border-2 border-dashed border-[var(--border)] bg-[var(--secondary)] flex flex-col items-center justify-center text-[var(--muted-foreground)] cursor-pointer hover:border-[color-mix(in_oklch,_var(--primary)_30%,_transparent)] transition-colors overflow-hidden relative">
-                    <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
-                    {uploading ? (
-                      <Loader size={24} className="animate-spin mb-1.5 opacity-50" />
-                    ) : form.image ? (
-                      <img src={form.image} alt="Preview" className="w-full h-full object-cover" />
-                    ) : (
-                      <>
-                        <Camera size={24} className="mb-1.5 opacity-50" />
-                        <span className="text-xs">Nhấn để tải ảnh lên</span>
-                      </>
-                    )}
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-t border-[var(--border)] pt-6 mb-6">
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><MapPin size={14} className="text-[var(--primary)]" /> Địa điểm hẹn lấy đồ *</label>
-              <select required className="w-full px-3.5 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] text-sm focus:ring-2 focus:ring-[color-mix(in_oklch,_var(--primary)_30%,_transparent)] outline-none transition-all" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })}>
-                <option value="" disabled>Chọn một điểm hẹn công cộng</option>
-                {LOCATIONS.map(loc => (<option key={loc} value={loc}>{loc}</option>))}
-              </select>
-              <p className="text-xs text-[var(--muted-foreground)] mt-1.5">Vui lòng chọn các địa điểm công cộng trong Làng Đại học.</p>
-            </div>
-
-            <button type="submit" disabled={!isFormValid}
-              className={`w-full py-3 rounded-xl font-bold text-sm transition-all ${isFormValid ? 'btn-primary justify-center shadow-md hover:shadow-lg' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
-              Đăng món đồ này
-            </button>
-          </form>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
       <Footer />

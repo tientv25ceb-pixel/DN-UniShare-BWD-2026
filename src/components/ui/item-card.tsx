@@ -18,6 +18,30 @@ export default function ItemCard({ item, idx = 0 }: ItemCardProps) {
   const { toggleFavorite, favorites } = useStore();
   const isFav = favorites.includes(item.id);
 
+  let badgeColor = 'bg-blue-500/90';
+  let badgeText = '🔄 Trao đổi';
+  let glowColor = 'rgba(59, 130, 246, 0.15)';
+
+  if (item.exchangeType === 'mienphi') {
+    badgeColor = 'bg-green-500/90';
+    badgeText = '🍀 Miễn phí';
+    glowColor = 'rgba(34, 197, 94, 0.15)';
+  } else if (item.exchangeType === 'sale') {
+    badgeColor = 'bg-amber-500/90';
+    badgeText = `💰 Bán: ${(item.price || 0).toLocaleString('vi-VN')} đ`;
+    glowColor = 'rgba(245, 158, 11, 0.15)';
+  } else if (item.exchangeType === 'lost') {
+    badgeColor = 'bg-red-500/90';
+    badgeText = '🔍 Mất đồ';
+    glowColor = 'rgba(239, 68, 68, 0.15)';
+  } else if (item.exchangeType === 'found') {
+    badgeColor = 'bg-cyan-500/90';
+    badgeText = '📢 Nhặt được';
+    glowColor = 'rgba(6, 182, 212, 0.15)';
+  }
+
+  const displayImage = item.image || 'https://images.unsplash.com/photo-1595787143151-e601da948ea8?auto=format&fit=crop&w=600&h=400&q=80';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40, rotateX: -10 }}
@@ -26,21 +50,21 @@ export default function ItemCard({ item, idx = 0 }: ItemCardProps) {
     >
       <TiltCard
         className="rounded-2xl overflow-hidden"
-        glowColor={item.exchangeType === 'mienphi' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(59, 130, 246, 0.15)'}
+        glowColor={glowColor}
       >
         <div className="rounded-2xl overflow-hidden flex flex-col group relative bg-[var(--card)]">
           <Link href={`/detail/${item.id}`}>
             <div className="relative aspect-[16/10] overflow-hidden">
               <Image
-                src={item.image}
+                src={displayImage}
                 alt={item.title}
                 fill
                 className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="absolute top-3 left-3 flex gap-2">
-                <span className={`badge text-white shadow-lg backdrop-blur-sm ${item.exchangeType === 'mienphi' ? 'bg-green-500/90' : 'bg-blue-500/90'}`}>
-                  {item.exchangeType === 'mienphi' ? '🍀 Miễn phí' : '🔄 Trao đổi'}
+                <span className={`badge text-white shadow-lg backdrop-blur-sm ${badgeColor}`}>
+                  {badgeText}
                 </span>
               </div>
               {item.isFeatured && (

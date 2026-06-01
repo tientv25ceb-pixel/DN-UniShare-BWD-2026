@@ -23,6 +23,12 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> }
     fetchMessages(id)
   }, [id])
 
+  const convMessages = messages[id] || [];
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [convMessages.length]);
+
   if (!currentUser) {
     return (
       <main className="min-h-screen flex flex-col">
@@ -40,13 +46,8 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> }
   }
 
   const conversation = conversations.find(c => c.id === id);
-  const convMessages = messages[id] || [];
   const otherName = conversation?.participantNames.find(n => n !== currentUser.name) || 'Người dùng';
   const isMyMessage = (senderId: string) => senderId === currentUser.id;
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [convMessages.length]);
 
   if (!conversation) {
     return (

@@ -1,6 +1,6 @@
 export type Category = 'sach' | 'do-hoc-tap' | 'do-ktx' | 'suatan' | 'tailieu' | 'khac';
 export type Condition = 'moi' | 'tot' | 'kha' | 'cu';
-export type ExchangeType = 'mienphi' | 'traodoi';
+export type ExchangeType = 'mienphi' | 'traodoi' | 'sale' | 'lost' | 'found';
 
 export interface Item {
   id: string;
@@ -18,6 +18,13 @@ export interface Item {
   requestedCount: number;
   isFeatured?: boolean;
   posterId?: string;
+  rawDescription?: string;
+  price?: number;
+  latitude?: number;
+  longitude?: number;
+  lostDate?: string;
+  reward?: string;
+  contactPhone?: string;
 }
 
 export interface User {

@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { useStore } from '@/lib/store';
-import { Gift, Heart, ClipboardList, Mail, Building2, Calendar, ArrowRight } from 'lucide-react';
+import { Gift, Heart, ClipboardList, Mail, Building2, Calendar, ArrowRight, Pencil, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { currentUser, items, requests, fetchItems, fetchRequests } = useStore();
+  const { currentUser, items, requests, fetchItems, fetchRequests, deleteItem } = useStore();
 
   useEffect(() => {
     fetchItems()
@@ -35,6 +35,13 @@ export default function ProfilePage() {
   }
 
   const myItems = items.filter(i => i.postedBy === currentUser.name);
+
+  const handleDelete = async (itemId: string, itemTitle: string) => {
+    if (!window.confirm(`Bạn có chắc muốn xóa "${itemTitle}"?`)) return;
+    try {
+      await deleteItem(itemId);
+    } catch { alert('Xóa thất bại'); }
+  };
   const sentRequests = requests.filter(r => r.requesterId === currentUser.id);
   const receivedRequests = requests.filter(r => r.requesterId !== currentUser.id);
   const acceptedRequests = [...sentRequests, ...receivedRequests].filter(r => r.status === 'accepted' || r.status === 'collected');
@@ -91,17 +98,34 @@ export default function ProfilePage() {
               </div>
               {myItems.length > 0 ? (
                 <div className="space-y-3">
-                  {myItems.slice(0, 4).map(item => (
-                    <Link key={item.id} href={`/detail/${item.id}`} className="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--secondary)] transition-colors">
-                      <div className="h-12 w-12 rounded-lg bg-[var(--secondary)] overflow-hidden shrink-0">
-                        <img src={item.image} alt="" className="w-full h-full object-cover" />
+                    {myItems.slice(0, 4).map(item => (
+                    <div key={item.id} className="group flex items-center gap-2 p-2 rounded-xl hover:bg-[var(--secondary)] transition-colors">
+                      <Link href={`/detail/${item.id}`} className="flex items-center gap-3 flex-grow min-w-0">
+                        <div className="h-12 w-12 rounded-lg bg-[var(--secondary)] overflow-hidden shrink-0">
+                          <img src={item.image} alt="" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex-grow min-w-0">
+                          <p className="text-sm font-medium truncate">{item.title}</p>
+                          <p className="text-xs text-[var(--muted-foreground)]">{item.requestedCount} lượt yêu cầu</p>
+                        </div>
+                      </Link>
+                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                        <button
+                          onClick={() => router.push(`/edit/${item.id}`)}
+                          className="h-8 w-8 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 flex items-center justify-center transition-colors"
+                          aria-label="Sửa"
+                        >
+                          <Pencil size={14} className="text-blue-400" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id, item.title)}
+                          className="h-8 w-8 rounded-lg bg-red-500/10 hover:bg-red-500/20 flex items-center justify-center transition-colors"
+                          aria-label="Xóa"
+                        >
+                          <Trash2 size={14} className="text-red-400" />
+                        </button>
                       </div>
-                      <div className="flex-grow min-w-0">
-                        <p className="text-sm font-medium truncate">{item.title}</p>
-                        <p className="text-xs text-[var(--muted-foreground)]">{item.requestedCount} lượt yêu cầu</p>
-                      </div>
-                      <ArrowRight size={16} className="text-[var(--muted-foreground)] shrink-0" />
-                    </Link>
+                    </div>
                   ))}
                 </div>
               ) : (

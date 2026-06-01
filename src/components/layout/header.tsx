@@ -3,16 +3,26 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
-import { Share2, Menu, X, User, LogOut, Heart, MessageCircle, ClipboardList, LogIn } from 'lucide-react';
+import { Share2, Menu, X, User, LogOut, Heart, MessageCircle, ClipboardList, LogIn, Gift, RefreshCw, Coins, Search as SearchIcon, ChevronDown } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/lib/store';
 import LoginModal from '@/components/auth/login-modal';
+import PostDropdown from '@/components/layout/post-dropdown';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const NAV_ITEMS = [
   { label: 'Trang chủ', href: '/' },
   { label: 'Tìm đồ', href: '/items' },
-  { label: 'Đăng món đồ', href: '/post' },
+  { label: 'Radar Quét', href: '/radar' },
   { label: 'Tác động', href: '/impact' },
+];
+
+const POST_ACTIONS = [
+  { type: 'mienphi', label: 'Tặng đồ', desc: 'Cho đi những món đồ còn tốt', icon: Gift, href: '/post/give', color: 'text-green-400', bg: 'hover:bg-green-500/8' },
+  { type: 'traodoi', label: 'Trao đổi', desc: 'Đổi đồ với sinh viên khác', icon: RefreshCw, href: '/post/exchange', color: 'text-blue-400', bg: 'hover:bg-blue-500/8' },
+  { type: 'sale', label: 'Bán đồ', desc: 'Thanh lý giá sinh viên', icon: Coins, href: '/post/sell', color: 'text-amber-400', bg: 'hover:bg-amber-500/8' },
+  { type: 'lost', label: 'Tìm đồ', desc: 'Báo tin thất lạc trong làng ĐH', icon: SearchIcon, href: '/post/lost', color: 'text-red-400', bg: 'hover:bg-red-500/8' },
+  { type: 'found', label: 'Nhặt được đồ', desc: 'Đăng tin tìm chủ cho vật phẩm', icon: Heart, href: '/post/found', color: 'text-cyan-400', bg: 'hover:bg-cyan-500/8' },
 ];
 
 export default function Header() {
@@ -20,6 +30,7 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isPostOpen, setIsPostOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
@@ -62,18 +73,20 @@ export default function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
-            {NAV_ITEMS.map(item => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                  pathname === item.href
-                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md shadow-blue-500/25'
-                    : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--secondary)] hover:shadow-sm'
-                }`}
-              >
-                {item.label}
-              </Link>
+            {NAV_ITEMS.map((item, idx) => (
+              <div key={item.href} className="contents">
+                {idx === 2 && <PostDropdown />}
+                <Link
+                  href={item.href}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    pathname === item.href
+                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md shadow-blue-500/25'
+                      : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--secondary)] hover:shadow-sm'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              </div>
             ))}
           </nav>
 
@@ -124,7 +137,7 @@ export default function Header() {
             )}
             <Link href="/post" className="btn-primary text-sm">
               <Share2 size={14} />
-              Đăng món đồ
+              Đăng
             </Link>
           </div>
 
@@ -151,19 +164,63 @@ export default function Header() {
                   </div>
                 </div>
               )}
-              {NAV_ITEMS.map(item => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                    pathname === item.href
-                      ? 'bg-[var(--primary)] text-white'
-                      : 'hover:bg-[var(--secondary)]'
-                  }`}
-                >
-                  {item.label}
-                </Link>
+              {NAV_ITEMS.map((item, idx) => (
+                <div key={item.href}>
+                  {idx === 2 ? (
+                    <div>
+                      <button
+                        onClick={() => setIsPostOpen(!isPostOpen)}
+                        className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-colors hover:bg-[var(--secondary)]"
+                      >
+                        <span>Đăng</span>
+                        <ChevronDown
+                          size={16}
+                          className={`transition-transform duration-300 ${isPostOpen ? 'rotate-180' : ''}`}
+                        />
+                      </button>
+                      <AnimatePresence>
+                        {isPostOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2, ease: 'easeOut' }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pl-4 pr-2 pb-2 flex flex-col gap-0.5">
+                              {POST_ACTIONS.map(action => (
+                                <Link
+                                  key={action.type}
+                                  href={action.href}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${action.bg}`}
+                                >
+                                  <action.icon size={16} className={action.color} />
+                                  <div>
+                                    <p className="text-sm font-medium">{action.label}</p>
+                                    <p className="text-[11px] text-[var(--muted-foreground)]">{action.desc}</p>
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                        pathname === item.href
+                          ? 'bg-[var(--primary)] text-white'
+                          : 'hover:bg-[var(--secondary)]'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </div>
               ))}
               {currentUser && (
                 <>
@@ -196,7 +253,7 @@ export default function Header() {
                 className="mt-2 btn-primary justify-center"
               >
                 <Share2 size={16} />
-                Đăng món đồ mới
+                Đăng
               </Link>
             </nav>
           </div>
