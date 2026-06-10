@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Gift, RefreshCw, Coins, Search, Heart, ArrowRight } from 'lucide-react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
-import MountainRange from '@/components/decorative/mountain-range';
 
 const OPTIONS = [
   {
@@ -12,11 +11,11 @@ const OPTIONS = [
     label: 'Tặng đồ',
     desc: 'Cho đi những món đồ còn tốt đến người cần',
     icon: Gift,
-    color: 'text-green-400',
-    border: 'border-green-500/20',
-    bg: 'bg-green-500/5',
-    hover: 'hover:border-green-500/40 hover:bg-green-500/10',
-    gradient: 'from-green-500/20 to-emerald-500/10',
+    color: 'text-[var(--dn-accent)]',
+    border: 'border-[var(--dn-accent)]/20',
+    bg: 'bg-[var(--dn-accent-soft)]/50',
+    hover: 'hover:border-[var(--dn-accent)]/40 hover:bg-[var(--dn-accent-soft)]',
+    gradient: 'from-[var(--dn-accent)]/20 to-[var(--dn-accent-dim)]/10',
   },
   {
     slug: 'exchange',
@@ -66,9 +65,8 @@ const OPTIONS = [
 
 export default function PostLanding() {
   return (
-    <main className="min-h-screen flex flex-col relative overflow-hidden">
+    <main className="min-h-screen flex flex-col relative overflow-hidden pb-safe">
       <Header />
-      <MountainRange className="absolute bottom-0 left-0 w-full h-[80px] opacity-40" />
       <div className="flex-grow pt-28 pb-16 relative z-10">
         <div className="container mx-auto px-4 md:px-6 max-w-4xl">
           <div className="text-center mb-12">

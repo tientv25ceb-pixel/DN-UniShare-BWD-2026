@@ -6,8 +6,6 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import QRModal from '@/components/qr-modal';
 import GiftAnimation from '@/components/decorative/gift-animation';
-import DragonBridge from '@/components/decorative/dragon-bridge';
-import WaveBackground from '@/components/decorative/wave-background';
 import { useStore } from '@/lib/store';
 import { CATEGORY_MAP, CONDITION_LABELS } from '@/lib/data';
 import Image from 'next/image';
@@ -33,7 +31,7 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
 
   if (!item) {
     return (
-      <main className="min-h-screen flex flex-col">
+      <main className="min-h-screen flex flex-col pb-safe">
         <Header />
         <div className="flex-grow flex items-center justify-center p-4">
           <div className="text-center">
@@ -89,17 +87,15 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
   };
 
   return (
-    <main className="min-h-screen flex flex-col relative overflow-hidden">
+    <main className="min-h-screen flex flex-col relative overflow-hidden pb-safe">
       <Header />
-      <DragonBridge className="absolute bottom-0 right-0 w-[180px] h-[80px] opacity-30 hidden md:block" />
-      <WaveBackground className="absolute top-60 left-0 opacity-30" opacity={0.03} />
 
       {toast && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-green-600 text-white px-6 py-3 rounded-full shadow-lg text-sm font-medium"
+          className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-[var(--dn-accent)] text-white px-6 py-3 rounded-full shadow-lg text-sm font-medium"
         >
           {toast}
         </motion.div>
@@ -116,7 +112,7 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
               <Image src={item.image || 'https://images.unsplash.com/photo-1595787143151-e601da948ea8?auto=format&fit=crop&w=600&h=400&q=80'} alt={item.title} fill className="object-cover" priority />
               <div className="absolute top-4 left-4 flex gap-2">
                 <span className={`badge text-white shadow-lg ${
-                  item.exchangeType === 'mienphi' ? 'bg-green-500' :
+                  item.exchangeType === 'mienphi' ? 'bg-[var(--dn-accent)]' :
                   item.exchangeType === 'sale' ? 'bg-amber-500' :
                   item.exchangeType === 'lost' ? 'bg-red-500' :
                   item.exchangeType === 'found' ? 'bg-cyan-500' : 'bg-blue-500'
@@ -241,7 +237,7 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
                     </button>
                   )
                 ) : hasRequested && requestStatus === 'pending' ? (
-                  <button disabled className="flex-1 py-3 rounded-xl bg-green-100/10 text-green-400 border border-green-500/20 font-bold text-sm flex items-center justify-center gap-2">
+                  <button disabled className="flex-1 py-3 rounded-xl bg-[var(--dn-accent-soft)] text-[var(--dn-accent)] border-[var(--dn-accent)]/20 font-bold text-sm flex items-center justify-center gap-2">
                     <Clock size={20} /> Đã gửi yêu cầu
                   </button>
                 ) : hasRequested && requestStatus === 'accepted' ? (

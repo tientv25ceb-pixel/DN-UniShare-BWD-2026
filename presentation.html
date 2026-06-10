@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ĐN-UniShare — Connect. Share. Thrive.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+<style>
+/* ===========================================
+   VIEWPORT FITTING: MANDATORY BASE STYLES
+   =========================================== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; overflow-x: hidden; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+
+.slide {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.slide-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 100%;
+  overflow: hidden;
+  padding: var(--slide-padding);
+}
+
+:root {
+  --title-size: clamp(1.5rem, 5vw, 4rem);
+  --h2-size: clamp(1.25rem, 3.5vw, 2.5rem);
+  --h3-size: clamp(1rem, 2.5vw, 1.75rem);
+  --body-size: clamp(0.75rem, 1.5vw, 1.125rem);
+  --small-size: clamp(0.65rem, 1vw, 0.875rem);
+  --slide-padding: clamp(1rem, 4vw, 4rem);
+  --content-gap: clamp(0.5rem, 2vw, 2rem);
+  --element-gap: clamp(0.25rem, 1vw, 1rem);
+
+  /* Bold Signal palette */
+  --bg-primary: #12121A;
+  --bg-card: #1E1E30;
+  --bg-card-hover: #282844;
+  --accent: #FF5E35;
+  --accent-glow: rgba(255, 94, 53, 0.3);
+  --accent-secondary: #FFB800;
+  --accent-teal: #00C9A7;
+  --text-primary: #FFFFFF;
+  --text-muted: rgba(255, 255, 255, 0.65);
+  --text-dim: rgba(255, 255, 255, 0.35);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: 'Archivo Black', sans-serif; line-height: 1.1; }
+h1 { font-size: var(--title-size); }
+h2 { font-size: var(--h2-size); }
+p, li { font-size: var(--body-size); line-height: 1.5; color: var(--text-muted); }
+
+.card, .container, .content-box {
+  max-width: min(90vw, 1000px);
+  max-height: min(80vh, 700px);
+}
+
+.feature-list, .bullet-list { gap: clamp(0.4rem, 1vh, 1rem); }
+.feature-list li, .bullet-list li { font-size: var(--body-size); line-height: 1.4; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: clamp(0.5rem, 1.5vw, 1rem);
+}
+
+img, .image-container { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
+
+@media (max-height: 700px) {
+  :root {
+    --slide-padding: clamp(0.75rem, 3vw, 2rem);
+    --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+    --title-size: clamp(1.25rem, 4.5vw, 2.5rem);
+    --h2-size: clamp(1rem, 3vw, 1.75rem);
+  }
+}
+@media (max-height: 600px) {
+  :root {
+    --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+    --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+    --title-size: clamp(1.1rem, 4vw, 2rem);
+    --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+  }
+  .nav-dots, .keyboard-hint, .decorative { display: none; }
+}
+@media (max-height: 500px) {
+  :root {
+    --slide-padding: clamp(0.4rem, 2vw, 1rem);
+    --title-size: clamp(1rem, 3.5vw, 1.5rem);
+    --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+    --body-size: clamp(0.65rem, 1vw, 0.85rem);
+  }
+}
+@media (max-width: 600px) {
+  :root { --title-size: clamp(1.25rem, 7vw, 2.5rem); }
+  .grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ===========================================
+   BOLD SIGNATURE: oversized section numbers
+   =========================================== */
+.section-number {
+  position: absolute;
+  right: clamp(1rem, 5vw, 4rem);
+  bottom: clamp(0.5rem, 3vh, 2rem);
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(4rem, 15vw, 12rem);
+  line-height: 1;
+  color: var(--text-dim);
+  opacity: 0.15;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ===========================================
+   ORANGE ACCENT BAR
+   =========================================== */
+.accent-bar {
+  width: clamp(2rem, 4vw, 4rem);
+  height: clamp(3px, 0.3vw, 5px);
+  background: var(--accent);
+  border-radius: 2px;
+  margin-bottom: var(--element-gap);
+}
+
+/* ===========================================
+   FLOATING ORB BACKGROUND
+   =========================================== */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.4;
+}
+.orb-1 {
+  width: min(50vw, 500px);
+  height: min(50vw, 500px);
+  background: var(--accent-glow);
+  top: -20%;
+  right: -10%;
+}
+.orb-2 {
+  width: min(40vw, 400px);
+  height: min(40vw, 400px);
+  background: rgba(0, 201, 167, 0.15);
+  bottom: -15%;
+  left: -10%;
+}
+
+/* ===========================================
+   CARDS
+   =========================================== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: clamp(0.5rem, 1vw, 1rem);
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.card:hover { background: var(--bg-card-hover); transform: translateY(-2px); }
+
+.card-icon {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  margin-bottom: var(--element-gap);
+}
+
+.card h3 {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: var(--h3-size);
+  margin-bottom: calc(var(--element-gap) / 2);
+}
+
+.card p { font-size: var(--small-size); }
+
+/* ===========================================
+   BADGES / TAGS
+   =========================================== */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 100px;
+  padding: clamp(0.3rem, 0.8vw, 0.6rem) clamp(0.6rem, 1.5vw, 1.2rem);
+  font-size: var(--small-size);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.tag:hover {
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+}
+
+/* ===========================================
+   STAT NUMBERS
+   =========================================== */
+.stat-number {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  line-height: 1;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label {
+  font-size: clamp(0.65rem, 1.2vw, 0.95rem);
+  color: var(--text-muted);
+  margin-top: calc(var(--element-gap) / 2);
+}
+
+/* ===========================================
+   STEP NUMBER
+   =========================================== */
+.step-number {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--accent);
+  opacity: 0.5;
+  line-height: 1;
+  margin-bottom: var(--element-gap);
+}
+
+/* ===========================================
+   NAVIGATION
+   =========================================== */
+.nav-dots {
+  position: fixed;
+  right: clamp(0.75rem, 2vw, 2rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 0.8vh, 0.8rem);
+  z-index: 100;
+}
+.nav-dot {
+  width: clamp(6px, 0.6vw, 10px);
+  height: clamp(6px, 0.6vw, 10px);
+  border-radius: 50%;
+  background: var(--text-dim);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+.nav-dot.active { background: var(--accent); transform: scale(1.5); }
+
+.slide-counter {
+  position: fixed;
+  bottom: clamp(0.75rem, 2vh, 2rem);
+  right: clamp(0.75rem, 2vw, 2rem);
+  font-size: var(--small-size);
+  color: var(--text-dim);
+  font-feature-settings: "tnum";
+  z-index: 100;
+}
+
+.keyboard-hint {
+  position: fixed;
+  bottom: clamp(0.75rem, 2vh, 2rem);
+  left: clamp(0.75rem, 2vw, 2rem);
+  font-size: var(--small-size);
+  color: var(--text-dim);
+  z-index: 100;
+  opacity: 0.6;
+}
+
+/* ===========================================
+   REVEAL ANIMATIONS
+   =========================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(clamp(1rem, 3vh, 2rem));
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ===========================================
+   TITLE SLIDE
+   =========================================== */
+.slide-title {
+  text-align: center;
+  align-items: center;
+}
+.slide-title .tagline {
+  display: inline-block;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 100px;
+  padding: clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.8rem, 1.5vw, 1.25rem);
+  font-size: clamp(0.65rem, 1vw, 0.85rem);
+  color: var(--text-muted);
+  margin-bottom: var(--content-gap);
+}
+.slide-title h1 {
+  margin-bottom: var(--element-gap);
+}
+.slide-title .subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.75rem);
+  color: var(--text-muted);
+  font-weight: 300;
+  margin-bottom: var(--content-gap);
+}
+
+/* ===========================================
+   CONTENT SLIDE LAYOUT
+   =========================================== */
+.slide-content-inner {
+  max-width: min(85vw, 960px);
+  width: 100%;
+  margin: 0 auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--content-gap);
+}
+
+.slide-content-inner h2 {
+  margin-bottom: calc(var(--content-gap) * 0.3);
+}
+
+/* ===========================================
+   TECH GRID
+   =========================================== */
+.tech-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: clamp(0.5rem, 1vw, 1rem);
+  padding: clamp(0.6rem, 1.5vw, 1.25rem);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.tech-item:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.tech-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: var(--body-size);
+  margin-bottom: calc(var(--element-gap) / 3);
+}
+.tech-role {
+  font-size: var(--small-size);
+  color: var(--text-muted);
+}
+
+/* ===========================================
+   LOCATION LIST
+   =========================================== */
+.location-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: clamp(0.4rem, 1vw, 0.75rem);
+}
+.location-item {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.4rem, 0.8vw, 0.75rem);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: clamp(0.4rem, 0.8vw, 0.75rem);
+  padding: clamp(0.4rem, 0.8vw, 0.75rem);
+}
+.location-icon {
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  flex-shrink: 0;
+}
+.location-name {
+  font-size: clamp(0.65rem, 1vw, 0.85rem);
+  font-weight: 500;
+}
+.location-area {
+  font-size: clamp(0.55rem, 0.8vw, 0.7rem);
+  color: var(--text-dim);
+  display: block;
+}
+
+/* ===========================================
+   CTA SLIDE
+   =========================================== */
+.slide-cta {
+  text-align: center;
+  align-items: center;
+}
+.cta-button {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--text-primary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+  padding: clamp(0.6rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+}
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--accent-glow);
+}
+
+.future-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.3rem, 0.8vw, 0.6rem);
+  justify-content: center;
+  margin-top: var(--element-gap);
+}
+.future-list li {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 100px;
+  padding: clamp(0.2rem, 0.5vw, 0.4rem) clamp(0.5rem, 1vw, 0.9rem);
+  font-size: var(--small-size);
+  color: var(--text-muted);
+}
+
+/* ===========================================
+   PILOT BADGE
+   =========================================== */
+.pilot-badge {
+  position: absolute;
+  top: clamp(0.75rem, 2vh, 2rem);
+  left: clamp(0.75rem, 2vw, 2rem);
+  display: flex;
+  align-items: center;
+  gap: clamp(0.4rem, 0.8vw, 0.75rem);
+  z-index: 10;
+}
+.pilot-badge img {
+  height: clamp(1.5rem, 3vh, 2.5rem);
+  width: auto;
+}
+.pilot-badge-text {
+  font-size: clamp(0.6rem, 0.9vw, 0.8rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.05em;
+}
+.pilot-badge-sub {
+  font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<!-- === NAVIGATION DOTS === -->
+<nav class="nav-dots" aria-label="Slide navigation">
+  <button class="nav-dot active" data-slide="0" aria-label="Go to slide 1"></button>
+  <button class="nav-dot" data-slide="1" aria-label="Go to slide 2"></button>
+  <button class="nav-dot" data-slide="2" aria-label="Go to slide 3"></button>
+  <button class="nav-dot" data-slide="3" aria-label="Go to slide 4"></button>
+  <button class="nav-dot" data-slide="4" aria-label="Go to slide 5"></button>
+  <button class="nav-dot" data-slide="5" aria-label="Go to slide 6"></button>
+  <button class="nav-dot" data-slide="6" aria-label="Go to slide 7"></button>
+  <button class="nav-dot" data-slide="7" aria-label="Go to slide 8"></button>
+  <button class="nav-dot" data-slide="8" aria-label="Go to slide 9"></button>
+  <button class="nav-dot" data-slide="9" aria-label="Go to slide 10"></button>
+</nav>
+
+<div class="slide-counter" aria-live="polite">01 / 10</div>
+<div class="keyboard-hint" aria-hidden="true">&#8592; &#8594; or scroll</div>
+
+<!-- ============================================
+     SLIDE 1: TITLE
+     ============================================ -->
+<section class="slide slide-title" data-index="0">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="slide-content">
+    <div class="slide-content-inner">
+      <div class="pilot-badge">
+        <img src="public/logo.png" alt="ĐN-UniShare logo">
+        <div>
+          <div class="pilot-badge-text">ĐN-UniShare</div>
+          <div class="pilot-badge-sub">Student Sharing Platform</div>
+        </div>
+      </div>
+      <div class="reveal visible">
+        <div class="tagline">&#127891; Da Nang University Village</div>
+        <h1>Connect.<br>Share.<br>Thrive.</h1>
+        <p class="subtitle">A student-powered platform for sharing books, supplies, meals &amp; more</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SLIDE 2: PROBLEM
+     ============================================ -->
+<section class="slide" data-index="1">
+  <div class="orb orb-1" style="width: min(40vw, 400px); height: min(40vw, 400px);"></div>
+  <div class="section-number" aria-hidden="true">01</div>
+  <div class="slide-content">
+    <div class="slide-content-inner">
+      <div class="accent-bar reveal"></div>
+      <h2 class="reveal">The Problem</h2>
+      <p class="reveal reveal-delay-1" style="max-width: min(70vw, 600px); margin-bottom: var(--element-gap);">
+        Every year at Da Nang University Village, tons of textbooks, dorm supplies, and study materials are abandoned when students graduate or move out. Meanwhile, thousands of new students buy the exact same items.
+      </p>
+      <div class="grid" style="grid-template-columns: 1fr 1fr; max-width: min(80vw, 700px);">
+        <div class="card reveal reveal-delay-2" style="text-align: center;">
+          <div class="card-icon">&#127947;</div>
+          <div class="stat-number">500+</div>
+          <div class="stat-label">tons of student items wasted yearly</div>
+        </div>
+        <div class="card reveal reveal-delay-3" style="text-align: center;">
+          <div class="card-icon">&#128203;</div>
+          <div class="stat-number">10K+</div>
+          <div class="stat-label">new students buying duplicates annually</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SLIDE 3: MISSION
+     ============================================ -->
+<section class="slide" data-index="2">
+  <div class="orb orb-2" style="width: min(45vw, 450px); height: min(45vw, 450px);"></div>
+  <div class="section-number" aria-hidden="true">02</div>
+  <div class="slide-content">
+    <div class="slide-content-inner">
+      <div class="accent-bar reveal"></div>
+      <h2 class="reveal">Our Mission</h2>
+      <p class="reveal reveal-delay-1" style="max-width: min(70vw, 600px); margin-bottom: var(--element-gap);">
+        Connect students who no longer need items with those who do. One shared item at a time.
+      </p>
+      <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="card reveal reveal-delay-1" style="text-align: center;">
+          <div class="card-icon">&#127793;</div>
+          <h3>Reduce Waste</h3>
+          <p>Extend the lifecycle of student items and cut down landfill waste in the university community.</p>
+        </div>
+        <div class="card reveal reveal-delay-2" style="text-align: center;">
+          <div class="card-icon">&#128176;</div>
+          <h3>Save Money</h3>
+          <p>Help students access free or low-cost essentials and lighten their financial burden.</p>
+        </div>
+        <div class="card reveal reveal-delay-3" style="text-align: center;">
+          <div class="card-icon">&#129309;</div>
+          <h3>Build Community</h3>
+          <p>Foster a culture of generosity and connection across Da Nang's university village.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SLIDE 4: HOW IT WORKS
+     ============================================ -->
+<section class="slide" data-index="3">
+  <div class="section-number" aria-hidden="true">03</div>
+  <div class="slide-content">
+    <div class="slide-content-inner">
+      <div class="accent-bar reveal"></div>
+      <h2 class="reveal">How It Works</h2>
+      <p class="reveal reveal-delay-1" style="max-width: min(70vw, 600px); margin-bottom: var(--element-gap);">
+        Three simple steps to start sharing.
+      </p>
+      <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="card reveal reveal-delay-1">
+          <div class="step-number">01</div>
+          <h3>Post an Item</h3>
+          <p>Snap a photo, pick a category, describe the condition, and set a meetup point.</p>
+        </div>
+        <div class="card reveal reveal-delay-2">
+          <div class="step-number">02</div>
+          <h3>Discover &amp; Request</h3>
+          <p>Browse listings, filter by category, and send a request to claim an item.</p>
+        </div>
+        <div class="card reveal reveal-delay-3">
+          <div class="step-number">03</div>
+          <h3>Connect &amp; Pickup</h3>
+          <p>Get approved, meet at a safe campus location, and pass it forward.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SLIDE 5: CORE FEATURES
+     ============================================ -->
+<section class="slide" data-index="4">
+  <div class="orb orb-1" style="width: min(35vw, 350px); height: min(35vw, 350px);"></div>
+  <div class="section-number" aria-hidden="true">04</div>
+  <div class="slide-content">
+    <div class="slide-content-inner">
+      <div class="accent-bar reveal"></div>
+      <h2 class="reveal">Core Features</h2>
+      <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="card reveal reveal-delay-1">
+          <div class="card-icon">&#128221;</div>
+          <h3>Post Items</h3>
+          <p>Optimized form with categories, condition, and campus meetup points.</p>
+        </div>
+        <div class="card reveal reveal-delay-1">
+          <div class="card-icon">&#128269;</div>
+          <h3>Explore &amp; Search</h3>
+          <p>Multi-dimensional filters and real-time search to find what you need.</p>
+        </div>
+        <div class="card reveal reveal-delay-2">
+          <div class="card-icon">&#128196;</div>
+          <h3>Item Details</h3>
+          <p>Large photos, condition info, location, and giver profile at a glance.</p>
+        </div>
+        <div class="card reveal reveal-delay-2">
+          <div class="card-icon">&#128233;</div>
+          <h3>Request System</h3>
+          <p>Send request &rarr; Giver approves &rarr; Arrange pickup. Simple flow.</p>
+        </div>
+        <div class="card reveal reveal-delay-3">
+          <div class="card-icon">&#128200;</div>
+          <h3>Impact Dashboard</h3>
+          <p>Real-time stats on items exchanged, waste reduced, and money saved.</p>
+        </div>
+        <div class="card reveal reveal-delay-3">
+          <div class="card-icon" style="color: var(--accent-secondary);">&#128752;</div>
+          <h3>Mobile First</h3>
+          <p>Responsive design built for students on the go. Works on any device.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SLIDE 6: CATEGORIES
+     ============================================ -->
+<section class="slide" data-index="5">
+  <div class="orb orb-2" style="width: min(40vw, 400px); height: min(40vw, 400px);"></div>
+  <div class="section-number" aria-hidden="true">05</div>
+  <div class="slide-content">
+    <div class="slide-content-inner">
+      <div class="accent-bar reveal"></div>
+      <h2 class="reveal">What You Can Share</h2>
+      <p class="reveal reveal-delay-1" style="max-width: min(70vw, 600px); margin-bottom: var(--element-gap);">
+        Five categories covering every student's essential needs.
+      </p>
+      <div class="grid" style="grid-template-columns: repeat(5, 1fr);">
+        <div class="card reveal reveal-delay-1" style="text-align: center;">
+          <div style="font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: var(--element-gap);">&#128218;</div>
+          <h3 style="font-size: var(--body-size);">Textbooks</h3>
+          <p style="font-size: var(--small-size);">Calculus, Programming, TOEIC &amp; more</p>
+        </div>
+        <div class="card reveal reveal-delay-1" style="text-align: center;">
+          <div style="font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: var(--element-gap);">&#127891;</div>
+          <h3 style="font-size: var(--body-size);">Study Supplies</h3>
+          <p style="font-size: var(--small-size);">Bags, mice, mechanical keyboards</p>
+        </div>
+        <div class="card reveal reveal-delay-2" style="text-align: center;">
+          <div style="font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: var(--element-gap);">&#127968;</div>
+          <h3 style="font-size: var(--body-size);">Dorm Items</h3>
+          <p style="font-size: var(--small-size);">Rice cookers, fans, desk lamps</p>
+        </div>
+        <div class="card reveal reveal-delay-2" style="text-align: center;">
+          <div style="font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: var(--element-gap);">&#127858;</div>
+          <h3 style="font-size: var(--body-size);">Meals &amp; Vouchers</h3>
+          <p style="font-size: var(--small-size);">Meal coupons, coffee vouchers</p>
+        </div>
+        <div class="card reveal reveal-delay-3" style="text-align: center;">
+          <div style="font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: var(--element-gap);">&#128203;</div>
+          <h3 style="font-size: var(--body-size);">Documents</h3>
+          <p style="font-size: var(--small-size);">Lecture slides, exams, study guides</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SLIDE 7: IMPACT
+     ============================================ -->
+<section class="slide" data-index="6">
+  <div class="section-number" aria-hidden="true">06</div>
+  <div class="slide-content">
+    <div class="slide-content-inner">
+      <div class="accent-bar reveal"></div>
+      <h2 class="reveal">Track Record</h2>
+      <p class="reveal reveal-delay-1" style="max-width: min(70vw, 600px); margin-bottom: var(--element-gap);">
+        Every exchange makes a difference. Here's what the community tracks.
+      </p>
+      <div class="grid" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="card reveal reveal-delay-1" style="text-align: center; padding: clamp(1rem, 3vw, 2rem);">
+          <div class="stat-number">250+</div>
+          <div class="stat-label">Items Exchanged</div>
+        </div>
+        <div class="card reveal reveal-delay-2" style="text-align: center; padding: clamp(1rem, 3vw, 2rem);">
+          <div class="stat-number">2.5T</div>
+          <div class="stat-label">Waste Reduced (kg)</div>
+        </div>
+        <div class="card reveal reveal-delay-3" style="text-align: center; padding: clamp(1rem, 3vw, 2rem);">
+          <div class="stat-number">50M+</div>
+          <div class="stat-label">VND Saved</div>
+        </div>
+        <div class="card reveal reveal-delay-4" style="text-align: center; padding: clamp(1rem, 3vw, 2rem);">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Students Reached</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SLIDE 8: TECH STACK
+     ============================================ -->
+<section class="slide" data-index="7">
+  <div class="orb orb-1" style="width: min(30vw, 300px); height: min(30vw, 300px);"></div>
+  <div class="section-number" aria-hidden="true">07</div>
+  <div class="slide-content">
+    <div class="slide-content-inner">
+      <div class="accent-bar reveal"></div>
+      <h2 class="reveal">Built With</h2>
+      <p class="reveal reveal-delay-1" style="max-width: min(70vw, 600px); margin-bottom: var(--element-gap);">
+        Modern stack for a modern platform.
+      </p>
+      <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="tech-item reveal reveal-delay-1">
+          <div class="tech-name">Next.js 16</div>
+          <div class="tech-role">React framework &amp; App Router</div>
+        </div>
+        <div class="tech-item reveal reveal-delay-1">
+          <div class="tech-name">TypeScript 5</div>
+          <div class="tech-role">Type safety &amp; code quality</div>
+        </div>
+        <div class="tech-item reveal reveal-delay-2">
+          <div class="tech-name">Tailwind CSS 4</div>
+          <div class="tech-role">Utility-first styling</div>
+        </div>
+        <div class="tech-item reveal reveal-delay-2">
+          <div class="tech-name">Framer Motion</div>
+          <div class="tech-role">Animations &amp; interactions</div>
+        </div>
+        <div class="tech-item reveal reveal-delay-3">
+          <div class="tech-name">Zustand 5</div>
+          <div class="tech-role">State management</div>
+        </div>
+        <div class="tech-item reveal reveal-delay-3">
+          <div class="tech-name">Supabase</div>
+          <div class="tech-role">Auth &amp; database</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SLIDE 9: SAFE EXCHANGE
+     ============================================ -->
+<section class="slide" data-index="8">
+  <div class="section-number" aria-hidden="true">08</div>
+  <div class="slide-content">
+    <div class="slide-content-inner">
+      <div class="accent-bar reveal"></div>
+      <h2 class="reveal">Safe &amp; Secure</h2>
+      <p class="reveal reveal-delay-1" style="max-width: min(70vw, 600px); margin-bottom: var(--element-gap);">
+        All exchanges happen at designated meetup points across the university village.
+      </p>
+      <div class="location-grid reveal reveal-delay-2">
+        <div class="location-item">
+          <span class="location-icon">&#127968;</span>
+          <div>
+            <div class="location-name">University Dormitory</div>
+            <span class="location-area">Central dorm area</span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-icon">&#128218;</span>
+          <div>
+            <div class="location-name">DUT Library</div>
+            <span class="location-area">Da Nang Univ. of Science &amp; Tech</span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-icon">&#9962;</span>
+          <div>
+            <div class="location-name">Main Gate</div>
+            <span class="location-area">University village entrance</span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-icon">&#127860;</span>
+          <div>
+            <div class="location-name">UED Cafeteria</div>
+            <span class="location-area">Univ. of Science &amp; Education</span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-icon">&#127970;</span>
+          <div>
+            <div class="location-name">DUE Lobby</div>
+            <span class="location-area">Univ. of Economics</span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-icon">&#128214;</span>
+          <div>
+            <div class="location-name">UFL Library</div>
+            <span class="location-area">Univ. of Foreign Languages</span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-icon">&#128218;</span>
+          <div>
+            <div class="location-name">Self-Study Hub</div>
+            <span class="location-area">Central study area</span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-icon">&#127858;</span>
+          <div>
+            <div class="location-name">DUT Canteen</div>
+            <span class="location-area">Da Nang Univ. of Science &amp; Tech</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SLIDE 10: CTA / FUTURE
+     ============================================ -->
+<section class="slide slide-cta" data-index="9">
+  <div class="orb orb-1" style="width: min(50vw, 500px); height: min(50vw, 500px);"></div>
+  <div class="orb orb-2" style="width: min(40vw, 400px); height: min(40vw, 400px);"></div>
+  <div class="slide-content">
+    <div class="slide-content-inner">
+      <div class="reveal visible">
+        <h1 style="font-size: clamp(1.5rem, 5vw, 3.5rem); margin-bottom: var(--element-gap);">Join the Movement</h1>
+        <p class="subtitle" style="font-size: clamp(0.9rem, 2vw, 1.4rem); margin-bottom: var(--content-gap);">
+          Open Source &middot; Community Driven &middot; Student Powered
+        </p>
+        <p style="max-width: min(60vw, 500px); margin: 0 auto var(--content-gap); color: var(--text-muted);">
+          ĐN-UniShare is built by students, for students. Contribute, share, and help build a more connected university village.
+        </p>
+        <div style="display: flex; gap: var(--element-gap); justify-content: center; flex-wrap: wrap;">
+          <a href="#" class="cta-button">&#128279; View on GitHub</a>
+          <a href="#" class="cta-button" style="background: transparent; border: 2px solid var(--accent);">&#127760; Try the Demo</a>
+        </div>
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: var(--body-size); color: var(--text-muted); margin-top: var(--content-gap);">
+          What's next?
+        </h3>
+        <ul class="future-list">
+          <li>REST API</li>
+          <li>Email Auth</li>
+          <li>Image Upload</li>
+          <li>Real-time Chat</li>
+          <li>Push Notifications</li>
+          <li>University Filters</li>
+          <li>PWA</li>
+        </ul>
+        <p style="margin-top: var(--content-gap); font-size: var(--small-size); color: var(--text-dim);">
+          Made with &#128154; for Da Nang Students
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  'use strict';
+
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav-dot');
+  const counter = document.querySelector('.slide-counter');
+  let currentIndex = 0;
+  let isAnimating = false;
+
+  function goTo(index) {
+    if (isAnimating) return;
+    if (index < 0 || index >= slides.length) return;
+    isAnimating = true;
+    currentIndex = index;
+    slides[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    updateUI();
+    setTimeout(() => { isAnimating = false; }, 600);
+    triggerReveal(index);
+  }
+
+  function updateUI() {
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
+    if (counter) {
+      const num = String(currentIndex + 1).padStart(2, '0');
+      const total = String(slides.length).padStart(2, '0');
+      counter.textContent = num + ' / ' + total;
+    }
+  }
+
+  function triggerReveal(index) {
+    const slide = slides[index];
+    if (!slide) return;
+    const reveals = slide.querySelectorAll('.reveal');
+    reveals.forEach((el, i) => {
+      el.classList.add('visible');
+    });
+  }
+
+  // Initial reveal for slide 1
+  triggerReveal(0);
+
+  // Intersection Observer for reveal on scroll
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = parseInt(entry.target.dataset.index, 10);
+          if (!isNaN(idx)) {
+            currentIndex = idx;
+            updateUI();
+            triggerReveal(idx);
+          }
+        }
+      });
+    }, { threshold: 0.5 });
+
+    slides.forEach(slide => observer.observe(slide));
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      goTo(currentIndex + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goTo(currentIndex - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goTo(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goTo(slides.length - 1);
+    }
+  });
+
+  // Mouse wheel navigation (with debounce)
+  let wheelTimeout = null;
+  document.addEventListener('wheel', function(e) {
+    if (wheelTimeout) return;
+    e.preventDefault();
+    wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 700);
+    if (e.deltaY > 0) {
+      goTo(currentIndex + 1);
+    } else {
+      goTo(currentIndex - 1);
+    }
+  }, { passive: false });
+
+  // Touch / swipe navigation
+  let touchStartY = 0;
+  let touchStartX = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartY = e.changedTouches[0].screenY;
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const deltaY = e.changedTouches[0].screenY - touchStartY;
+    const deltaX = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 40) {
+      if (deltaY < 0) goTo(currentIndex + 1);
+      else goTo(currentIndex - 1);
+    }
+  }, { passive: true });
+
+  // Dot clicks
+  dots.forEach(dot => {
+    dot.addEventListener('click', function() {
+      const idx = parseInt(this.dataset.slide, 10);
+      goTo(idx);
+    });
+  });
+
+  // Update UI on scroll snap (fallback)
+  let scrollTimeout;
+  document.addEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const center = window.innerHeight / 2;
+      let closest = 0;
+      let closestDist = Infinity;
+      slides.forEach((slide, i) => {
+        const rect = slide.getBoundingClientRect();
+        const dist = Math.abs(rect.top + rect.height / 2 - center);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = i;
+        }
+      });
+      if (closest !== currentIndex) {
+        currentIndex = closest;
+        updateUI();
+        triggerReveal(closest);
+      }
+    }, 150);
+  }, { passive: true });
+
+})();
+</script>
+</body>
+</html>

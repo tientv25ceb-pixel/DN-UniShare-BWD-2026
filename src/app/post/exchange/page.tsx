@@ -59,13 +59,13 @@ export default function ExchangePage() {
       <main className="min-h-screen flex flex-col">
         <Header />
         <div className="flex-grow flex items-center justify-center p-4">
-          <div className="card p-10 rounded-2xl max-w-md w-full text-center animate-in">
+          <div className="dn-card p-10 rounded-2xl max-w-md w-full text-center animate-in">
             <div className="h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-6 text-blue-600"><CheckCircle2 size={40} /></div>
             <h2 className="text-2xl font-bold mb-3">Tin trao đổi đã được đăng!</h2>
-            <p className="text-sm text-[var(--muted-foreground)] mb-8">Chúc bạn sớm tìm được đối tác ưng ý.</p>
+            <p className="text-sm text-[var(--dn-text-secondary)] mb-8">Chúc bạn sớm tìm được đối tác ưng ý.</p>
             <div className="flex flex-col gap-3">
-              <button onClick={() => router.push('/items')} className="btn-primary justify-center w-full py-3">Xem danh sách</button>
-              <button onClick={() => { setSubmitted(false); setForm({ title: '', description: '', want: '', category: '', condition: '', location: '', image: '' }); }} className="btn-outline justify-center w-full py-3">Đăng tin khác</button>
+              <button onClick={() => router.push('/items')} className="dn-btn-primary justify-center w-full py-3">Xem danh sách</button>
+              <button onClick={() => { setSubmitted(false); setForm({ title: '', description: '', want: '', category: '', condition: '', location: '', image: '' }); }} className="dn-btn-outline justify-center w-full py-3">Đăng tin khác</button>
             </div>
           </div>
         </div>
@@ -83,13 +83,13 @@ export default function ExchangePage() {
             <div className="h-16 w-16 mx-auto mb-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
               <RefreshCw size={32} className="text-blue-400" />
             </div>
-            <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2">Trao đổi</h1>
-            <p className="text-sm text-[var(--muted-foreground)]">Bạn có gì — bạn cần gì? Cùng nhau đổi đồ nhé!</p>
+            <h1 className="text-3xl font-bold text-[var(--dn-text-primary)] mb-2">Trao đổi</h1>
+            <p className="text-sm text-[var(--dn-text-secondary)]">Bạn có gì — bạn cần gì? Cùng nhau đổi đồ nhé!</p>
           </div>
 
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="card p-5 rounded-2xl border border-blue-500/10 bg-blue-500/[0.02]">
+              <div className="dn-card p-5 rounded-2xl border border-blue-500/10 bg-blue-500/[0.02]">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="h-8 w-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
                     <ArrowLeftRight size={16} className="text-blue-400" />
@@ -98,32 +98,32 @@ export default function ExchangePage() {
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-[var(--muted-foreground)] mb-1">Món đồ *</label>
-                    <input type="text" required placeholder="VD: Bàn phím cơ Keychron" className="input-field" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
+                    <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] mb-1">Món đồ *</label>
+                    <input type="text" required placeholder="VD: Bàn phím cơ Keychron" className="dn-input" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[var(--muted-foreground)] mb-1">Mô tả *</label>
-                    <textarea required rows={3} placeholder="Tình trạng, màu sắc, phụ kiện kèm theo..." className="input-field resize-none" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
+                    <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] mb-1">Mô tả *</label>
+                    <textarea required rows={3} placeholder="Tình trạng, màu sắc, phụ kiện kèm theo..." className="dn-input resize-none" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-semibold text-[var(--muted-foreground)] mb-1">Danh mục *</label>
-                      <select required className="input-field" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value as Category }))}>
+                      <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] mb-1">Danh mục *</label>
+                      <select required className="dn-input" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value as Category }))}>
                         <option value="" disabled>Chọn</option>
                         {Object.entries(CATEGORY_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-[var(--muted-foreground)] mb-1">Tình trạng *</label>
-                      <select required className="input-field" value={form.condition} onChange={e => setForm(p => ({ ...p, condition: e.target.value as Condition }))}>
+                      <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] mb-1">Tình trạng *</label>
+                      <select required className="dn-input" value={form.condition} onChange={e => setForm(p => ({ ...p, condition: e.target.value as Condition }))}>
                         <option value="" disabled>Chọn</option>
                         {Object.entries(CONDITION_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                       </select>
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[var(--muted-foreground)] mb-1">Ảnh *</label>
-                    <label className="w-full h-[100px] rounded-xl border-2 border-dashed border-[var(--border)] bg-transparent flex flex-col items-center justify-center text-[var(--muted-foreground)] cursor-pointer hover:border-blue-400 hover:bg-blue-500/5 transition-colors overflow-hidden">
+                    <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] mb-1">Ảnh *</label>
+                    <label className="w-full h-[100px] rounded-xl border-2 border-dashed border-[var(--dn-border-strong)] bg-transparent flex flex-col items-center justify-center text-[var(--dn-text-secondary)] cursor-pointer hover:border-blue-400 hover:bg-blue-500/5 transition-colors overflow-hidden">
                       <input type="file" accept="image/*" className="hidden" onChange={handleImage} disabled={uploading} />
                       {uploading ? <Loader size={20} className="animate-spin opacity-50" />
                       : form.image ? <img src={form.image} alt="" className="w-full h-full object-cover" />
@@ -133,7 +133,7 @@ export default function ExchangePage() {
                 </div>
               </div>
 
-              <div className="card p-5 rounded-2xl border border-blue-500/10 bg-blue-500/[0.02]">
+              <div className="dn-card p-5 rounded-2xl border border-blue-500/10 bg-blue-500/[0.02]">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="h-8 w-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
                     <RefreshCw size={16} className="text-blue-400" />
@@ -142,22 +142,22 @@ export default function ExchangePage() {
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-[var(--muted-foreground)] mb-1">Món đồ muốn đổi *</label>
-                    <input type="text" required placeholder="VD: USB hub, sách giáo trình..." className="input-field" value={form.want} onChange={e => setForm(p => ({ ...p, want: e.target.value }))} />
+                    <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] mb-1">Món đồ muốn đổi *</label>
+                    <input type="text" required placeholder="VD: USB hub, sách giáo trình..." className="dn-input" value={form.want} onChange={e => setForm(p => ({ ...p, want: e.target.value }))} />
                   </div>
                   <div className="pt-20">
                     <div className="rounded-xl border border-dashed border-blue-500/20 bg-blue-500/[0.03] p-6 text-center">
-                      <p className="text-xs text-[var(--muted-foreground)]">Gợi ý: bạn có thể ghi rõ tình trạng mong muốn hoặc giá trị tương đương</p>
+                      <p className="text-xs text-[var(--dn-text-secondary)]">Gợi ý: bạn có thể ghi rõ tình trạng mong muốn hoặc giá trị tương đương</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="card p-5 rounded-2xl border border-[var(--border)] mb-6">
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-3 flex items-center gap-1.5"><MapPin size={14} className="text-blue-400" /> Địa điểm hẹn gặp *</label>
+            <div className="dn-card p-5 rounded-2xl border border-[var(--dn-border-strong)] mb-6">
+              <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-3 flex items-center gap-1.5"><MapPin size={14} className="text-blue-400" /> Địa điểm hẹn gặp *</label>
               <VietMapSelector selectedLocation={form.location} onSelectLocation={(name) => setForm(p => ({ ...p, location: name }))} />
-              <select required className="input-field mt-3" value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))}>
+              <select required className="dn-input mt-3" value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))}>
                 <option value="" disabled>Chọn từ danh sách</option>
                 {LOCATIONS.map(loc => <option key={loc} value={loc}>{loc}</option>)}
               </select>
@@ -181,11 +181,11 @@ function AuthGate() {
     <main className="min-h-screen flex flex-col">
       <Header />
       <div className="flex-grow flex items-center justify-center p-4">
-        <div className="auth-gate">
+        <div className="dn-auth-gate">
           <div className="text-5xl mb-4">🔒</div>
           <h2 className="text-xl font-bold mb-2">Vui lòng đăng nhập</h2>
-          <p className="text-sm text-[var(--muted-foreground)] mb-6">Bạn cần đăng nhập để trao đổi đồ.</p>
-          <Link href="/" className="btn-primary">Về trang chủ</Link>
+          <p className="text-sm text-[var(--dn-text-secondary)] mb-6">Bạn cần đăng nhập để trao đổi đồ.</p>
+          <Link href="/" className="dn-btn-primary">Về trang chủ</Link>
         </div>
       </div>
       <Footer />

@@ -129,6 +129,7 @@ export const useStore = create<ShareStore>()((set, get) => ({
   requests: [],
   requestsLoading: false,
   fetchRequests: async (type = 'all') => {
+    if (!get().currentUser) return
     set({ requestsLoading: true })
     try {
       const requests = await api.getRequests(type)
@@ -151,6 +152,7 @@ export const useStore = create<ShareStore>()((set, get) => ({
 
   favorites: [],
   fetchFavorites: async () => {
+    if (!get().currentUser) return
     try {
       const favs = await api.getFavorites()
       set({ favorites: favs })
@@ -170,6 +172,7 @@ export const useStore = create<ShareStore>()((set, get) => ({
 
   conversations: [],
   fetchConversations: async () => {
+    if (!get().currentUser) return
     try {
       const convs = await api.getConversations()
       set({ conversations: convs })
@@ -190,6 +193,7 @@ export const useStore = create<ShareStore>()((set, get) => ({
 
   messages: {},
   fetchMessages: async (conversationId) => {
+    if (!get().currentUser) return
     try {
       const msgs = await api.getMessages(conversationId)
       set((state) => ({ messages: { ...state.messages, [conversationId]: msgs } }))

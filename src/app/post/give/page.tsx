@@ -60,13 +60,13 @@ export default function GivePage() {
       <main className="min-h-screen flex flex-col">
         <Header />
         <div className="flex-grow flex items-center justify-center p-4">
-          <div className="card p-10 rounded-2xl max-w-md w-full text-center animate-in">
-            <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6 text-green-600"><CheckCircle2 size={40} /></div>
+          <div className="dn-card p-10 rounded-2xl max-w-md w-full text-center animate-in">
+            <div className="h-20 w-20 rounded-full bg-[var(--dn-accent-soft)] flex items-center justify-center mx-auto mb-6 text-[var(--dn-accent)]"><CheckCircle2 size={40} /></div>
             <h2 className="text-2xl font-bold mb-3">Cảm ơn bạn!</h2>
-            <p className="text-sm text-[var(--muted-foreground)] mb-8">Món đồ của bạn đang chờ chủ mới. Một hành động nhỏ, một niềm vui lớn.</p>
+            <p className="text-sm text-[var(--dn-text-secondary)] mb-8">Món đồ của bạn đang chờ chủ mới. Một hành động nhỏ, một niềm vui lớn.</p>
             <div className="flex flex-col gap-3">
-              <button onClick={() => router.push('/items')} className="btn-primary justify-center w-full py-3">Xem danh sách</button>
-              <button onClick={() => { setSubmitted(false); setForm({ title: '', description: '', category: '', condition: '', location: '', image: '' }); }} className="btn-outline justify-center w-full py-3">Tặng thêm món khác</button>
+              <button onClick={() => router.push('/items')} className="dn-btn-primary justify-center w-full py-3">Xem danh sách</button>
+              <button onClick={() => { setSubmitted(false); setForm({ title: '', description: '', category: '', condition: '', location: '', image: '' }); }} className="dn-btn-outline justify-center w-full py-3">Tặng thêm món khác</button>
             </div>
           </div>
         </div>
@@ -79,38 +79,38 @@ export default function GivePage() {
     <main className="min-h-screen flex flex-col">
       <Header />
       <div className="flex-grow pt-28 pb-16 relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-green-500/3 blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[var(--dn-accent)]/3 blur-[100px] pointer-events-none" />
         <div className="container mx-auto px-4 md:px-6 max-w-2xl relative">
           <div className="text-center mb-10">
-            <div className="h-16 w-16 mx-auto mb-4 rounded-2xl bg-green-500/10 border border-green-500/20 flex items-center justify-center">
-              <Gift size={32} className="text-green-400" />
+            <div className="h-16 w-16 mx-auto mb-4 rounded-2xl bg-[var(--dn-accent-soft)] border border-[var(--dn-accent)]/20 flex items-center justify-center">
+              <Gift size={32} className="text-[var(--dn-accent)]" />
             </div>
-            <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2">Tặng đồ</h1>
-            <p className="text-sm text-[var(--muted-foreground)]">Cho đi những món đồ còn tốt — niềm vui sẽ nhân đôi</p>
+            <h1 className="text-3xl font-bold text-[var(--dn-text-primary)] mb-2">Tặng đồ</h1>
+            <p className="text-sm text-[var(--dn-text-secondary)]">Cho đi những món đồ còn tốt — niềm vui sẽ nhân đôi</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Tên món đồ *</label>
-              <input type="text" required placeholder="VD: Giáo trình Giải tích 1" className="input-field" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
+              <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-1.5">Tên món đồ *</label>
+              <input type="text" required placeholder="VD: Giáo trình Giải tích 1" className="dn-input" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Mô tả *</label>
-              <textarea required rows={4} placeholder="Tình trạng thế nào? Tại sao bạn muốn tặng?..." className="input-field resize-none" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
+              <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-1.5">Mô tả *</label>
+              <textarea required rows={4} placeholder="Tình trạng thế nào? Tại sao bạn muốn tặng?..." className="dn-input resize-none" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Danh mục *</label>
-                <select required className="input-field" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value as Category }))}>
+                <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-1.5">Danh mục *</label>
+                <select required className="dn-input" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value as Category }))}>
                   <option value="" disabled>Chọn danh mục</option>
                   {Object.entries(CATEGORY_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Tình trạng *</label>
-                <select required className="input-field" value={form.condition} onChange={e => setForm(p => ({ ...p, condition: e.target.value as Condition }))}>
+                <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-1.5">Tình trạng *</label>
+                <select required className="dn-input" value={form.condition} onChange={e => setForm(p => ({ ...p, condition: e.target.value as Condition }))}>
                   <option value="" disabled>Chọn tình trạng</option>
                   {Object.entries(CONDITION_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                 </select>
@@ -118,8 +118,8 @@ export default function GivePage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Hình ảnh *</label>
-              <label className="w-full h-[120px] rounded-xl border-2 border-dashed border-[var(--border)] bg-[var(--card)] flex flex-col items-center justify-center text-[var(--muted-foreground)] cursor-pointer hover:border-green-400 hover:bg-green-500/5 transition-colors overflow-hidden">
+              <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-1.5">Hình ảnh *</label>
+              <label className="w-full h-[120px] rounded-xl border-2 border-dashed border-[var(--dn-accent)]/30 bg-[var(--dn-surface-muted)] flex flex-col items-center justify-center text-[var(--dn-text-secondary)] cursor-pointer hover:border-[var(--dn-accent)] hover:bg-[var(--dn-accent-soft)] transition-colors overflow-hidden">
                 <input type="file" accept="image/*" className="hidden" onChange={handleImage} disabled={uploading} />
                 {uploading ? <Loader size={24} className="animate-spin opacity-50" />
                 : form.image ? <img src={form.image} alt="" className="w-full h-full object-cover" />
@@ -127,17 +127,17 @@ export default function GivePage() {
               </label>
             </div>
 
-            <div className="space-y-3 pt-2 border-t border-[var(--border)]">
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider flex items-center gap-1.5"><MapPin size={14} className="text-green-400" /> Địa điểm hẹn gặp *</label>
+            <div className="space-y-3 pt-2 border-t border-[var(--dn-accent)]/20">
+              <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider flex items-center gap-1.5"><MapPin size={14} className="text-[var(--dn-accent)]" /> Địa điểm hẹn gặp *</label>
               <VietMapSelector selectedLocation={form.location} onSelectLocation={(name) => setForm(p => ({ ...p, location: name }))} />
-              <select required className="input-field" value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))}>
+              <select required className="dn-input" value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))}>
                 <option value="" disabled>Hoặc chọn từ danh sách</option>
                 {LOCATIONS.map(loc => <option key={loc} value={loc}>{loc}</option>)}
               </select>
             </div>
 
             <button type="submit" disabled={!isValid}
-              className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${isValid ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/20 hover:shadow-green-500/30 hover:scale-[1.02] cursor-pointer' : 'bg-white/5 text-gray-600 cursor-not-allowed border border-white/5'}`}>
+              className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${isValid ? 'bg-[var(--dn-accent)] text-white shadow-lg shadow-[var(--dn-accent-glow)] hover:brightness-110 hover:scale-[1.02] cursor-pointer' : 'bg-white/5 text-gray-600 cursor-not-allowed border border-white/5'}`}>
               <Gift size={16} />
               Đăng tin tặng đồ
             </button>
@@ -154,11 +154,11 @@ function AuthGate() {
     <main className="min-h-screen flex flex-col">
       <Header />
       <div className="flex-grow flex items-center justify-center p-4">
-        <div className="auth-gate">
+        <div className="dn-auth-gate">
           <div className="text-5xl mb-4">🔒</div>
           <h2 className="text-xl font-bold mb-2">Vui lòng đăng nhập</h2>
-          <p className="text-sm text-[var(--muted-foreground)] mb-6">Bạn cần đăng nhập để tặng đồ.</p>
-          <Link href="/" className="btn-primary">Về trang chủ</Link>
+          <p className="text-sm text-[var(--dn-text-secondary)] mb-6">Bạn cần đăng nhập để tặng đồ.</p>
+          <Link href="/" className="dn-btn-primary">Về trang chủ</Link>
         </div>
       </div>
       <Footer />

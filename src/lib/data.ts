@@ -94,6 +94,16 @@ export const LOCATIONS = [
   'Thư viện ĐH Ngoại ngữ',
   'Khu tự học Làng Đại học',
   'Nhà ăn ĐH Bách Khoa',
+  'Đại học Bách Khoa Đà Nẵng',
+  'Đại học Kinh tế Đà Nẵng',
+  'Đại học Sư phạm Đà Nẵng',
+  'Đại học Ngoại ngữ Đà Nẵng',
+  'Đại học Công nghệ Thông tin & TT Việt-Hàn (VKU)',
+  'Đại học Thể dục Thể thao Đà Nẵng',
+  'Đại học Duy Tân',
+  'Đại học Đông Á',
+  'Đại học Kiến trúc Đà Nẵng',
+  'Đại học Phạm Văn Đồng',
 ];
 
 // Sử dụng ảnh Unsplash chất lượng cao khớp thực tế với tên sản phẩm

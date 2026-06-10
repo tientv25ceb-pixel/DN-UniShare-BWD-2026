@@ -18,6 +18,16 @@ const MAP_HOTSPOTS = [
   { name: 'Thư viện ĐH Ngoại ngữ', lat: 16.0422, lng: 108.2222, tag: 'Thư viện Ngoại ngữ', safety: 'An toàn • Có camera thư viện • Yên tĩnh' },
   { name: 'Khu tự học Làng Đại học', lat: 15.9742, lng: 108.2482, tag: 'Khu tự học', safety: 'Rất an toàn • Nhiều sinh viên học nhóm • Sáng sủa' },
   { name: 'Nhà ăn ĐH Bách Khoa', lat: 16.0722, lng: 108.1482, tag: 'Nhà ăn BK', safety: 'An toàn • Có camera nhà ăn • Tấp nập' },
+  { name: 'Đại học Bách Khoa Đà Nẵng', lat: 16.0738, lng: 108.1499, tag: 'ĐH Bách Khoa', safety: 'An toàn • Khuôn viên rộng • Bảo vệ cổng trường' },
+  { name: 'Đại học Kinh tế Đà Nẵng', lat: 16.0544, lng: 108.2322, tag: 'ĐH Kinh tế', safety: 'An toàn • Gần đường chính • Nhiều sinh viên' },
+  { name: 'Đại học Sư phạm Đà Nẵng', lat: 16.0772, lng: 108.1522, tag: 'ĐH Sư phạm', safety: 'An toàn • Cơ sở khang trang • Camera' },
+  { name: 'Đại học Ngoại ngữ Đà Nẵng', lat: 16.0422, lng: 108.2222, tag: 'ĐH Ngoại ngữ', safety: 'An toàn • Khu vực yên tĩnh • Thư viện' },
+  { name: 'Đại học Công nghệ Thông tin & TT Việt-Hàn (VKU)', lat: 16.0745, lng: 108.1470, tag: 'VKU', safety: 'An toàn • Cơ sở mới • Camera an ninh' },
+  { name: 'Đại học Thể dục Thể thao Đà Nẵng', lat: 16.0710, lng: 108.2160, tag: 'ĐH TDTT', safety: 'An toàn • Sân vận động rộng • Nhiều người' },
+  { name: 'Đại học Duy Tân', lat: 16.0650, lng: 108.2100, tag: 'Duy Tân', safety: 'An toàn • Trung tâm thành phố • Nhiều sinh viên' },
+  { name: 'Đại học Đông Á', lat: 16.0580, lng: 108.2280, tag: 'Đông Á', safety: 'An toàn • Gần trung tâm • Đường lớn' },
+  { name: 'Đại học Kiến trúc Đà Nẵng', lat: 16.0670, lng: 108.2210, tag: 'Kiến trúc', safety: 'An toàn • Khu vực sầm uất • Gần chợ' },
+  { name: 'Đại học Phạm Văn Đồng', lat: 16.0810, lng: 108.1920, tag: 'Phạm Văn Đồng', safety: 'An toàn • Khu dân cư • Gần biển' },
 ];
 
 export default function VietMapSelector({ selectedLocation, onSelectLocation }: VietMapSelectorProps) {
@@ -211,8 +221,8 @@ export default function VietMapSelector({ selectedLocation, onSelectLocation }: 
       const map = new window.vietmapgl.Map({
         container: containerRef.current,
         style: styleUrl,
-        center: [108.2497, 15.9752], // Làng Đại học Đà Nẵng coordinates [lng, lat]
-        zoom: 14,
+        center: [108.2000, 16.0500], // Trung tâm Đà Nẵng coordinates [lng, lat]
+        zoom: 12,
         pitch: 30, // 3D tilt look
       });
 

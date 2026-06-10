@@ -512,23 +512,21 @@ export default function GlobeBackground() {
   }, []);
 
   return (
-    <div className="fixed inset-0 -z-10 w-screen h-screen overflow-hidden bg-[#050a15] pointer-events-none select-none">
-      {/* Background Gradients */}
-      <div className="absolute inset-0 bg-radial-gradient from-blue-950/20 via-transparent to-transparent opacity-60 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#050a15] via-transparent to-[#050a15] pointer-events-none" />
-      <div 
+    <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none">
+      <div className="absolute inset-0 bg-gradient-to-b from-[var(--dn-surface-base)] via-transparent to-[var(--dn-surface-base)] pointer-events-none z-10" />
+      <div
         className="absolute inset-0 opacity-40 pointer-events-none"
         style={{
           backgroundImage: `
-            radial-gradient(ellipse at 25% 45%, rgba(0,60,120,0.12) 0%, transparent 55%),
-            radial-gradient(ellipse at 75% 30%, rgba(0,100,70,0.06) 0%, transparent 45%)
+            radial-gradient(ellipse at 25% 45%, color-mix(in oklch, var(--dn-border-strong) 12%, transparent) 0%, transparent 55%),
+            radial-gradient(ellipse at 75% 30%, color-mix(in oklch, var(--dn-border-strong) 6%, transparent) 0%, transparent 45%)
           `
         }}
       />
       {isLoading && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#050a15] z-20 gap-3">
-          <div className="w-10 h-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
-          <span className="text-xs text-blue-300/60 font-medium">Đang tải bản đồ 3D...</span>
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-20 gap-3">
+          <div className="w-10 h-10 border-4 border-[var(--dn-border-strong)]/20 border-t-[var(--dn-border-strong)] rounded-full animate-spin" />
+          <span className="text-xs text-[var(--dn-text-secondary)] font-medium">Đang tải bản đồ 3D...</span>
         </div>
       )}
       <div

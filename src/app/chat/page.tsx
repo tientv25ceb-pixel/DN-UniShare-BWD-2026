@@ -17,7 +17,7 @@ export default function ChatListPage() {
 
   if (!currentUser) {
     return (
-      <main className="min-h-screen flex flex-col">
+      <main className="min-h-screen flex flex-col pb-safe">
         <Header />
         <div className="flex-grow flex items-center justify-center p-4">
           <div className="auth-gate">
@@ -35,7 +35,7 @@ export default function ChatListPage() {
   const myConversations = conversations.filter(c => c.participantIds.includes(currentUser.id));
 
   return (
-    <main className="min-h-screen flex flex-col">
+    <main className="min-h-screen flex flex-col pb-safe">
       <Header />
       <div className="flex-grow pt-28 pb-16">
         <div className="container mx-auto px-4 md:px-6 max-w-3xl">

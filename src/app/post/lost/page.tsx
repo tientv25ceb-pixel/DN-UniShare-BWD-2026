@@ -49,7 +49,7 @@ export default function LostPage() {
         }),
         category: 'khac' as Category,
         condition: 'kha' as Condition,
-        exchangeType: 'mienphi',
+        exchangeType: 'lost',
         location: form.location,
         image: form.image || '',
       });
@@ -62,13 +62,13 @@ export default function LostPage() {
       <main className="min-h-screen flex flex-col">
         <Header />
         <div className="flex-grow flex items-center justify-center p-4">
-          <div className="card p-10 rounded-2xl max-w-md w-full text-center animate-in">
+          <div className="dn-card p-10 rounded-2xl max-w-md w-full text-center animate-in">
             <div className="h-20 w-20 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6 text-red-600"><CheckCircle2 size={40} /></div>
             <h2 className="text-2xl font-bold mb-3">Đã đăng tin thất lạc!</h2>
-            <p className="text-sm text-[var(--muted-foreground)] mb-8">Cộng đồng sẽ giúp bạn tìm lại món đồ. Hy vọng bạn sớm nhận được tin tốt.</p>
+            <p className="text-sm text-[var(--dn-text-secondary)] mb-8">Cộng đồng sẽ giúp bạn tìm lại món đồ. Hy vọng bạn sớm nhận được tin tốt.</p>
             <div className="flex flex-col gap-3">
-              <button onClick={() => router.push('/items')} className="btn-primary justify-center w-full py-3">Xem danh sách</button>
-              <button onClick={() => { setSubmitted(false); setForm({ title: '', description: '', lostDate: '', contactPhone: '', reward: '', location: '', image: '' }); }} className="btn-outline justify-center w-full py-3">Đăng tin khác</button>
+              <button onClick={() => router.push('/items')} className="dn-btn-primary justify-center w-full py-3">Xem danh sách</button>
+              <button onClick={() => { setSubmitted(false); setForm({ title: '', description: '', lostDate: '', contactPhone: '', reward: '', location: '', image: '' }); }} className="dn-btn-outline justify-center w-full py-3">Đăng tin khác</button>
             </div>
           </div>
         </div>
@@ -88,41 +88,41 @@ export default function LostPage() {
               <AlertTriangle size={24} className="text-red-400" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-[var(--foreground)] mb-1">Báo tin thất lạc</h1>
-              <p className="text-sm text-[var(--muted-foreground)]">Đừng lo! Hãy cung cấp thông tin chi tiết, cộng đồng sẽ giúp bạn tìm lại.</p>
+              <h1 className="text-2xl font-bold text-[var(--dn-text-primary)] mb-1">Báo tin thất lạc</h1>
+              <p className="text-sm text-[var(--dn-text-secondary)]">Đừng lo! Hãy cung cấp thông tin chi tiết, cộng đồng sẽ giúp bạn tìm lại.</p>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Món đồ bị mất / Tiêu đề *</label>
-              <input type="text" required placeholder="VD: Ví da màu đen, Balo Laptop..." className="input-field border-red-500/20 focus:border-red-400" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
+              <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-1.5">Món đồ bị mất / Tiêu đề *</label>
+              <input type="text" required placeholder="VD: Ví da màu đen, Balo Laptop..." className="dn-input border-red-500/20 focus:border-red-400" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Mô tả nhận dạng *</label>
-              <textarea required rows={4} placeholder="Màu sắc, thương hiệu, vật dụng bên trong, dấu hiệu nhận biết..." className="input-field resize-none border-red-500/20 focus:border-red-400" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
+              <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-1.5">Mô tả nhận dạng *</label>
+              <textarea required rows={4} placeholder="Màu sắc, thương hiệu, vật dụng bên trong, dấu hiệu nhận biết..." className="dn-input resize-none border-red-500/20 focus:border-red-400" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><Calendar size={14} className="text-red-400" /> Thời gian mất *</label>
-                <input type="text" required placeholder="VD: Tối ngày 30/05, khoảng 7h" className="input-field" value={form.lostDate} onChange={e => setForm(p => ({ ...p, lostDate: e.target.value }))} />
+                <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><Calendar size={14} className="text-red-400" /> Thời gian mất *</label>
+                <input type="text" required placeholder="VD: Tối ngày 30/05, khoảng 7h" className="dn-input" value={form.lostDate} onChange={e => setForm(p => ({ ...p, lostDate: e.target.value }))} />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><Phone size={14} className="text-red-400" /> Số điện thoại *</label>
-                <input type="tel" required placeholder="VD: 0987xxxxxx" className="input-field" value={form.contactPhone} onChange={e => setForm(p => ({ ...p, contactPhone: e.target.value }))} />
+                <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><Phone size={14} className="text-red-400" /> Số điện thoại *</label>
+                <input type="tel" required placeholder="VD: 0987xxxxxx" className="dn-input" value={form.contactPhone} onChange={e => setForm(p => ({ ...p, contactPhone: e.target.value }))} />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Hậu tạ / Phần thưởng</label>
-              <input type="text" placeholder="VD: Xin hậu tạ 100.000đ hoặc cốc trà sữa" className="input-field" value={form.reward} onChange={e => setForm(p => ({ ...p, reward: e.target.value }))} />
+              <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-1.5">Hậu tạ / Phần thưởng</label>
+              <input type="text" placeholder="VD: Xin hậu tạ 100.000đ hoặc cốc trà sữa" className="dn-input" value={form.reward} onChange={e => setForm(p => ({ ...p, reward: e.target.value }))} />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-1.5">Hình ảnh (nếu có)</label>
-              <label className="w-full h-[100px] rounded-xl border-2 border-dashed border-[var(--border)] bg-[var(--card)] flex flex-col items-center justify-center text-[var(--muted-foreground)] cursor-pointer hover:border-red-400 hover:bg-red-500/5 transition-colors overflow-hidden">
+              <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider mb-1.5">Hình ảnh (nếu có)</label>
+              <label className="w-full h-[100px] rounded-xl border-2 border-dashed border-[var(--dn-border-strong)] bg-[var(--dn-surface-muted)] flex flex-col items-center justify-center text-[var(--dn-text-secondary)] cursor-pointer hover:border-red-400 hover:bg-red-500/5 transition-colors overflow-hidden">
                 <input type="file" accept="image/*" className="hidden" onChange={handleImage} disabled={uploading} />
                 {uploading ? <Loader size={20} className="animate-spin opacity-50" />
                 : form.image ? <img src={form.image} alt="" className="w-full h-full object-cover" />
@@ -130,10 +130,10 @@ export default function LostPage() {
               </label>
             </div>
 
-            <div className="space-y-3 pt-2 border-t border-[var(--border)]">
-              <label className="block text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider flex items-center gap-1.5"><MapPin size={14} className="text-red-400" /> Nơi có khả năng đánh rơi *</label>
+            <div className="space-y-3 pt-2 border-t border-[var(--dn-border-strong)]">
+              <label className="block text-xs font-semibold text-[var(--dn-text-secondary)] uppercase tracking-wider flex items-center gap-1.5"><MapPin size={14} className="text-red-400" /> Nơi có khả năng đánh rơi *</label>
               <VietMapSelector selectedLocation={form.location} onSelectLocation={(name) => setForm(p => ({ ...p, location: name }))} />
-              <select required className="input-field" value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))}>
+              <select required className="dn-input" value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))}>
                 <option value="" disabled>Chọn từ danh sách</option>
                 {LOCATIONS.map(loc => <option key={loc} value={loc}>{loc}</option>)}
               </select>
@@ -157,11 +157,11 @@ function AuthGate() {
     <main className="min-h-screen flex flex-col">
       <Header />
       <div className="flex-grow flex items-center justify-center p-4">
-        <div className="auth-gate">
+        <div className="dn-auth-gate">
           <div className="text-5xl mb-4">🔒</div>
           <h2 className="text-xl font-bold mb-2">Vui lòng đăng nhập</h2>
-          <p className="text-sm text-[var(--muted-foreground)] mb-6">Bạn cần đăng nhập để báo tin thất lạc.</p>
-          <Link href="/" className="btn-primary">Về trang chủ</Link>
+          <p className="text-sm text-[var(--dn-text-secondary)] mb-6">Bạn cần đăng nhập để báo tin thất lạc.</p>
+          <Link href="/" className="dn-btn-primary">Về trang chủ</Link>
         </div>
       </div>
       <Footer />
