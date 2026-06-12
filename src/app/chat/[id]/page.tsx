@@ -133,7 +133,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> }
               value={input}
               onChange={e => setInput(e.target.value)}
               placeholder="Nhập tin nhắn..."
-              className="flex-grow px-5 py-3 rounded-full border border-[var(--dn-border-strong)] bg-white text-sm focus:ring-2 focus:ring-[color-mix(in_oklch,_var(--primary)_30%,_transparent)] outline-none transition-all"
+              className="flex-grow px-5 py-3 rounded-full border border-[var(--dn-border-strong)] bg-[var(--dn-surface-elevated)] text-[var(--dn-text-primary)] text-sm focus:ring-2 focus:ring-[color-mix(in_oklch,_var(--primary)_30%,_transparent)] outline-none transition-all"
             />
             <button
               type="submit"
