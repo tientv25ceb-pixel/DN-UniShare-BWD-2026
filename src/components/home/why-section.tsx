@@ -1,20 +1,9 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { useRef } from 'react';
 import { Recycle, Users, Sparkles, BookOpen, Package, Heart, Check } from 'lucide-react';
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08 },
-  },
-};
+import { useScrollReveal } from '@/hooks/use-scroll-reveal';
+import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
 
 const features = [
   {
@@ -49,56 +38,49 @@ const features = [
   },
 ];
 
-export default function WhySection() {
-  const reduce = useReducedMotion();
+export default function WhySection({ cinematic = false }: { cinematic?: boolean }) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduce = usePrefersReducedMotion();
+
+  useScrollReveal(sectionRef, {
+    selector: '.gsap-reveal',
+    y: 36,
+    stagger: 0.09,
+    disabled: reduce,
+  });
+
+  const headingClass = cinematic ? 'text-white' : '';
+  const bodyClass = cinematic ? 'text-white/70' : '';
+  const cardClass = cinematic
+    ? 'bg-white/5 border-white/10 backdrop-blur-md'
+    : '';
+  const subTextClass = cinematic ? 'text-white/60' : 'text-[var(--dn-text-secondary)]';
 
   return (
-    <section className="dn-section">
-      <div className="dn-container">
-        <motion.div
-          initial={reduce ? false : 'hidden'}
-          whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
-          variants={fadeUp}
-          className="text-center mb-4"
-        >
+    <section ref={sectionRef} className="dn-section">
+      <div className={`dn-container ${cinematic ? 'dn-cinematic-panel' : ''}`}>
+        <div className="gsap-reveal text-center mb-4">
           <div className="dn-label mx-auto mb-5 w-fit">Nền tảng</div>
-        </motion.div>
-        <motion.h2
-          initial={reduce ? false : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="dn-heading dn-heading--section text-center mb-4"
+        </div>
+        <h2
+          className={`gsap-reveal dn-heading dn-heading--section text-center mb-4 ${headingClass}`}
         >
           Tại sao sinh viên chọn{' '}
           <span className="gradient-text">ĐN-UniShare?</span>
-        </motion.h2>
-        <motion.p
-          initial={reduce ? false : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="dn-body text-center mx-auto mb-14 text-base"
-        >
+        </h2>
+        <p className={`gsap-reveal dn-body text-center mx-auto mb-14 text-base ${bodyClass}`}>
           Hàng ngàn sinh viên Đà Nẵng đang cùng nhau xây dựng một cộng đồng tử tế — nơi đồ cũ
           tìm được chủ mới và tình bạn được thắp lên.
-        </motion.p>
+        </p>
 
-        <motion.div
-          variants={staggerContainer}
-          initial={reduce ? false : 'hidden'}
-          whileInView="visible"
-          viewport={{ once: true, margin: '-40px' }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          {/* Card 1: Giảm lãng phí (md:col-span-2) */}
-          <motion.div variants={fadeUp} className="dn-card p-6 md:p-8 md:col-span-2 flex flex-col md:flex-row gap-6 justify-between items-center overflow-hidden group">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className={`gsap-reveal dn-card p-6 md:p-8 md:col-span-2 flex flex-col md:flex-row gap-6 justify-between items-center overflow-hidden group ${cardClass}`}>
             <div className="flex-1">
               <div className="h-11 w-11 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
                 <Recycle size={22} className="text-emerald-500" />
               </div>
               <h3 className="font-bold text-lg mb-2">{features[0].title}</h3>
-              <p className="text-sm text-[var(--dn-text-secondary)] leading-relaxed max-w-sm">{features[0].desc}</p>
+              <p className={`text-sm leading-relaxed max-w-sm ${subTextClass}`}>{features[0].desc}</p>
             </div>
             <div className="relative w-40 h-40 flex items-center justify-center bg-[var(--dn-surface-strong)]/40 rounded-full border border-[var(--dn-border)] p-4 shrink-0">
               <div className="absolute inset-2 rounded-full border-4 border-dashed border-emerald-500/20 animate-spin" style={{ animationDuration: '20s' }} />
@@ -107,10 +89,9 @@ export default function WhySection() {
                 <p className="text-[10px] text-[var(--dn-text-secondary)] uppercase tracking-wider font-semibold">kg CO2 giảm</p>
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Card 2: Kết nối cộng đồng (md:col-span-1) */}
-          <motion.div variants={fadeUp} className="dn-card p-6 md:p-8 md:col-span-1 flex flex-col justify-between group">
+          <div className={`gsap-reveal dn-card p-6 md:p-8 ${cardClass} md:col-span-1 flex flex-col justify-between group`}>
             <div>
               <div className="h-11 w-11 rounded-xl bg-blue-500/10 flex items-center justify-center mb-4">
                 <Users size={22} className="text-blue-500" />
@@ -128,10 +109,9 @@ export default function WhySection() {
               </div>
               <span className="text-[11px] text-[var(--dn-text-tertiary)] font-semibold">+1.2k Online</span>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Card 3: Lan tỏa tử tế (md:col-span-1) */}
-          <motion.div variants={fadeUp} className="dn-card p-6 md:p-8 md:col-span-1 flex flex-col justify-between group">
+          <div className={`gsap-reveal dn-card p-6 md:p-8 ${cardClass} md:col-span-1 flex flex-col justify-between group`}>
             <div>
               <div className="h-11 w-11 rounded-xl bg-rose-500/10 flex items-center justify-center mb-4">
                 <Sparkles size={22} className="text-rose-500" />
@@ -142,10 +122,9 @@ export default function WhySection() {
             <div className="flex items-center justify-center mt-6 py-2 bg-[var(--dn-surface-strong)]/30 rounded-xl border border-[var(--dn-border)]">
               <Heart size={18} className="text-rose-500 animate-pulse" />
             </div>
-          </motion.div>
+          </div>
 
-          {/* Card 4: Tri thức trong tầm tay (md:col-span-1) */}
-          <motion.div variants={fadeUp} className="dn-card p-6 md:p-8 md:col-span-1 flex flex-col justify-between group">
+          <div className={`gsap-reveal dn-card p-6 md:p-8 ${cardClass} md:col-span-1 flex flex-col justify-between group`}>
             <div>
               <div className="h-11 w-11 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-4">
                 <BookOpen size={22} className="text-indigo-500" />
@@ -160,10 +139,9 @@ export default function WhySection() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Card 5: Đồ dùng sinh hoạt (md:col-span-2) */}
-          <motion.div variants={fadeUp} className="dn-card p-6 md:p-8 md:col-span-2 flex flex-col md:flex-row gap-6 justify-between items-center group">
+          <div className={`gsap-reveal dn-card p-6 md:p-8 ${cardClass} md:col-span-2 flex flex-col md:flex-row gap-6 justify-between items-center group`}>
             <div className="flex-1">
               <div className="h-11 w-11 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4">
                 <Package size={22} className="text-amber-500" />
@@ -181,10 +159,9 @@ export default function WhySection() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Card 6: Trao gửi yêu thương (md:col-span-3) */}
-          <motion.div variants={fadeUp} className="dn-card p-6 md:p-8 md:col-span-3 flex flex-col md:flex-row gap-6 justify-between items-center overflow-hidden group">
+          <div className={`gsap-reveal dn-card p-6 md:p-8 ${cardClass} md:col-span-3 flex flex-col md:flex-row gap-6 justify-between items-center overflow-hidden group`}>
             <div className="flex-1">
               <div className="h-11 w-11 rounded-xl bg-pink-500/10 flex items-center justify-center mb-4">
                 <Heart size={22} className="text-pink-500" />
@@ -201,8 +178,8 @@ export default function WhySection() {
                 <span className="text-[10px] font-semibold text-[var(--dn-text-secondary)]">Thu Trang · CNTT K24</span>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );
