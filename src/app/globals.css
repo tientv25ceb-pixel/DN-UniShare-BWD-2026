@@ -37,6 +37,8 @@
     --dn-surface-strong: var(--dn-surface-raised);
     --dn-shadow-1: 0 0 30px var(--dn-accent-glow);
     --dn-surface-base: var(--dn-surface);
+    --primary: var(--dn-accent);
+    --secondary: var(--dn-surface-strong);
   }
 
   @media (prefers-color-scheme: light) {
@@ -57,6 +59,8 @@
       --dn-surface-muted: var(--dn-surface-elevated);
       --dn-surface-strong: var(--dn-surface-raised);
       --dn-shadow-1: 0 0 30px var(--dn-accent-glow);
+      --primary: var(--dn-accent);
+      --secondary: var(--dn-surface-strong);
     }
   }
 
