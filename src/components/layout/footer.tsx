@@ -66,7 +66,7 @@ export default function Footer() {
                   alt="ĐN-UniShare Logo"
                   width={160}
                   height={40}
-                  className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+                  className="h-8 w-auto object-contain rounded-xl transition-transform duration-300 group-hover:scale-[1.02]"
                 />
               </Link>
               <p className="text-sm text-[var(--dn-text-secondary)] leading-relaxed max-w-sm mt-3">

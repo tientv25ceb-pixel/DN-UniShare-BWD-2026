@@ -10,24 +10,17 @@ interface VietMapSelectorProps {
 }
 
 const MAP_HOTSPOTS = [
-  { name: 'KTX Làng Đại học', lat: 15.9752, lng: 108.2497, tag: 'KTX', safety: 'Rất an toàn • Đèn đường sáng • Bảo vệ 24/7' },
-  { name: 'Thư viện ĐH Bách Khoa', lat: 16.0738, lng: 108.1499, tag: 'Thư viện BK', safety: 'An toàn • Camera thư viện • Rất đông sinh viên' },
-  { name: 'Cổng chính Làng Đại học', lat: 15.9772, lng: 108.2522, tag: 'Cổng chính', safety: 'An toàn • Nhiều người qua lại • Mặt đường lớn' },
-  { name: 'Căn-tin ĐH Sư phạm', lat: 16.0772, lng: 108.1522, tag: 'Căn-tin SP', safety: 'Rất an toàn • Có camera căn tin • Sáng sủa' },
-  { name: 'Sảnh ĐH Kinh tế', lat: 16.0544, lng: 108.2322, tag: 'Sảnh Kinh tế', safety: 'An toàn • Khu học tập chung • Sáng sủa' },
-  { name: 'Thư viện ĐH Ngoại ngữ', lat: 16.0422, lng: 108.2222, tag: 'Thư viện Ngoại ngữ', safety: 'An toàn • Có camera thư viện • Yên tĩnh' },
-  { name: 'Khu tự học Làng Đại học', lat: 15.9742, lng: 108.2482, tag: 'Khu tự học', safety: 'Rất an toàn • Nhiều sinh viên học nhóm • Sáng sủa' },
-  { name: 'Nhà ăn ĐH Bách Khoa', lat: 16.0722, lng: 108.1482, tag: 'Nhà ăn BK', safety: 'An toàn • Có camera nhà ăn • Tấp nập' },
   { name: 'Đại học Bách Khoa Đà Nẵng', lat: 16.0738, lng: 108.1499, tag: 'ĐH Bách Khoa', safety: 'An toàn • Khuôn viên rộng • Bảo vệ cổng trường' },
   { name: 'Đại học Kinh tế Đà Nẵng', lat: 16.0544, lng: 108.2322, tag: 'ĐH Kinh tế', safety: 'An toàn • Gần đường chính • Nhiều sinh viên' },
   { name: 'Đại học Sư phạm Đà Nẵng', lat: 16.0772, lng: 108.1522, tag: 'ĐH Sư phạm', safety: 'An toàn • Cơ sở khang trang • Camera' },
   { name: 'Đại học Ngoại ngữ Đà Nẵng', lat: 16.0422, lng: 108.2222, tag: 'ĐH Ngoại ngữ', safety: 'An toàn • Khu vực yên tĩnh • Thư viện' },
-  { name: 'Đại học Công nghệ Thông tin & TT Việt-Hàn (VKU)', lat: 16.0745, lng: 108.1470, tag: 'VKU', safety: 'An toàn • Cơ sở mới • Camera an ninh' },
+  { name: 'Đại học Sư phạm Kỹ thuật Đà Nẵng', lat: 16.0776, lng: 108.2215, tag: 'ĐH SP Kỹ thuật', safety: 'An toàn • Khu vực trung tâm • Sáng sủa' },
+  { name: 'Đại học Công nghệ Thông tin & TT Việt-Hàn (VKU)', lat: 15.9752, lng: 108.2497, tag: 'VKU', safety: 'An toàn • Cơ sở mới • Camera an ninh' },
+  { name: 'Đại học FPT Đà Nẵng', lat: 15.9722, lng: 108.2515, tag: 'FPT Đà Nẵng', safety: 'An toàn • Cơ sở hiện đại • Bảo vệ nghiêm ngặt' },
   { name: 'Đại học Thể dục Thể thao Đà Nẵng', lat: 16.0710, lng: 108.2160, tag: 'ĐH TDTT', safety: 'An toàn • Sân vận động rộng • Nhiều người' },
   { name: 'Đại học Duy Tân', lat: 16.0650, lng: 108.2100, tag: 'Duy Tân', safety: 'An toàn • Trung tâm thành phố • Nhiều sinh viên' },
   { name: 'Đại học Đông Á', lat: 16.0580, lng: 108.2280, tag: 'Đông Á', safety: 'An toàn • Gần trung tâm • Đường lớn' },
   { name: 'Đại học Kiến trúc Đà Nẵng', lat: 16.0670, lng: 108.2210, tag: 'Kiến trúc', safety: 'An toàn • Khu vực sầm uất • Gần chợ' },
-  { name: 'Đại học Phạm Văn Đồng', lat: 16.0810, lng: 108.1920, tag: 'Phạm Văn Đồng', safety: 'An toàn • Khu dân cư • Gần biển' },
 ];
 
 export default function VietMapSelector({ selectedLocation, onSelectLocation }: VietMapSelectorProps) {

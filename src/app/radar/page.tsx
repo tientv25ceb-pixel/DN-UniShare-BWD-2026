@@ -10,14 +10,17 @@ import { Radar, MapPin, Navigation, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 const LOCATION_COORDS: Record<string, { lat: number; lng: number }> = {
-  'KTX Làng Đại học':        { lat: 15.9752, lng: 108.2497 },
-  'Thư viện ĐH Bách Khoa':   { lat: 16.0738, lng: 108.1499 },
-  'Cổng chính Làng Đại học': { lat: 15.9772, lng: 108.2522 },
-  'Căn-tin ĐH Sư phạm':      { lat: 16.0772, lng: 108.1522 },
-  'Sảnh ĐH Kinh tế':         { lat: 16.0544, lng: 108.2322 },
-  'Thư viện ĐH Ngoại ngữ':   { lat: 16.0422, lng: 108.2222 },
-  'Khu tự học Làng Đại học': { lat: 15.9742, lng: 108.2482 },
-  'Nhà ăn ĐH Bách Khoa':     { lat: 16.0722, lng: 108.1482 },
+  'Đại học Bách Khoa Đà Nẵng': { lat: 16.0738, lng: 108.1499 },
+  'Đại học Kinh tế Đà Nẵng': { lat: 16.0544, lng: 108.2322 },
+  'Đại học Sư phạm Đà Nẵng': { lat: 16.0772, lng: 108.1522 },
+  'Đại học Ngoại ngữ Đà Nẵng': { lat: 16.0422, lng: 108.2222 },
+  'Đại học Sư phạm Kỹ thuật Đà Nẵng': { lat: 16.0776, lng: 108.2215 },
+  'Đại học Công nghệ Thông tin & TT Việt-Hàn (VKU)': { lat: 15.9752, lng: 108.2497 },
+  'Đại học FPT Đà Nẵng': { lat: 15.9722, lng: 108.2515 },
+  'Đại học Duy Tân': { lat: 16.0650, lng: 108.2100 },
+  'Đại học Đông Á': { lat: 16.0580, lng: 108.2280 },
+  'Đại học Kiến trúc Đà Nẵng': { lat: 16.0670, lng: 108.2210 },
+  'Đại học Thể dục Thể thao Đà Nẵng': { lat: 16.0710, lng: 108.2160 },
 };
 
 function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -34,7 +37,7 @@ function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
 
 export default function RadarPage() {
   const { items, fetchItems } = useStore();
-  const [myLocation, setMyLocation] = useState('KTX Làng Đại học');
+  const [myLocation, setMyLocation] = useState('Đại học Công nghệ Thông tin & TT Việt-Hàn (VKU)');
   const [isScanning, setIsScanning] = useState(true);
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [detectedItems, setDetectedItems] = useState<any[]>([]);
